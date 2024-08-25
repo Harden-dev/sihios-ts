@@ -38,7 +38,7 @@ class SendDailySubscriberReport extends Command
 
             try {
                 Mail::to('sihiotsinfo@gmail.com')
-                ->cc('direction@softskills.ci')
+                ->cc('info@sihiots.net')
                 ->send(new DailySubscriberReport($newSubscribers));
 
                 $this->info('Email envoyé avec succès.');

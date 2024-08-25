@@ -51,7 +51,7 @@
 
 <body>
     <div class="container">
-        <h1>Rapport quotidien des nouveaux abonnés à la newsletter</h1>
+        <h1>Rapport quotidien des nouveaux abonnés à la newsletter </h1>
         <p>Voici la liste des nouveaux abonnés à la newsletter pour la journée du {{ now()->format('d/m/Y') }}
             :</p>
 
