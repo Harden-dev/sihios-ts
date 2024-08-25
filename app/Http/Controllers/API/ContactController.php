@@ -29,8 +29,8 @@ class ContactController extends Controller
         $contact->save();
 
         // Envoi de l'email
-        Mail::to('micstech.28@gmail.com')
-            ->cc('direction@softskills.ci')
+        Mail::to('sihiotsinfo@gmail.com')
+            ->cc('info@sihiots.net')
             ->send(new ContactMail($contact));
 
         return response()->json(['message' => 'success'], 200);
