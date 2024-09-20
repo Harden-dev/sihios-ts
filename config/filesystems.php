@@ -56,6 +56,31 @@ return [
             'throw' => false,
         ],
 
+        'librairie' => [
+            'driver' => 'local',
+            'root' => storage_path('app/librairie'),
+            'url' => env('APP_URL').'/librairies',
+            'visibility' => 'private',
+            'throw' => false,
+        ],
+
+        'event'=> [
+            'driver' => 'local',
+            'root' => storage_path('app/eventFile'),
+            'url' => env('APP_URL').'/events',
+            'visibility' => 'private',
+            'throw' => false,
+        ],
+
+
+        'parcours'=> [
+            'driver' => 'local',
+            'root' => storage_path('app/parcours'),
+            'url' => env('APP_URL').'/parcours',
+            'visibility' => 'private',
+            'throw' => false,
+        ]
+
     ],
 
     /*

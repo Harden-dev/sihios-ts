@@ -1,0 +1,25 @@
+<script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                const checkboxes = document.querySelectorAll('.coupure-checkbox');
+                                                
+                                                checkboxes.forEach(checkbox => {
+                                                    checkbox.addEventListener('change', function() {
+                                                        const detailsId = 'details_' + this.value;
+                                                        const detailsElement = document.getElementById(detailsId);
+                                                        
+                                                        if (this.checked) {
+                                                            detailsElement.style.display = 'block';
+                                                        } else {
+                                                            detailsElement.style.display = 'none';
+                                                        }
+                                                    });
+
+                                                    // Initialize visibility on page load
+                                                    const detailsId = 'details_' + checkbox.value;
+                                                    const detailsElement = document.getElementById(detailsId);
+                                                    if (checkbox.checked) {
+                                                        detailsElement.style.display = 'block';
+                                                    }
+                                                });
+    });
+</script>
