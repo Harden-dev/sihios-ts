@@ -185,7 +185,7 @@ class AdminController extends Controller
      */
     public function getActiveMember()
     {
-        $users = User::query()->where('status', 'approved')->get();
+        $users = User::withTrashed()->where('status', 'approved')->get();
         return response()->json(['users' => $users]);
     }
 
@@ -340,5 +340,54 @@ class AdminController extends Controller
             return response()->json(['message' => 'Membre désactivé avec succès']);
         }
         return response()->json(['message' => "Désolé, membre ne peut pas être désactivé. Veuillez si c'est un memebre déja approuvé"]);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/admin/change-status/{id}/member",
+     *     tags={"Admin"},
+     *     summary="Changer le statut d'un membre (activer/désactiver)",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID du membre à activer ou désactiver",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Statut du membre changé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Activation réussie")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Membre non trouvé",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Membre non trouvé")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur lors de la modification du statut",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Une erreur est survenue")
+     *         )
+     *     )
+     * )
+     */
+
+    public function changeMemberStatus($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+
+        if ($user->trashed()) {
+            $user->restore();
+            return response()->json(['message' => "Activation réussie"]);
+        } else {
+            $user->delete();
+            return response()->json(['message' => "Désactivation réussie"]);
+        }
     }
 }

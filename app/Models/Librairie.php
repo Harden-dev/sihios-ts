@@ -9,7 +9,7 @@ class Librairie extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'file_path', 'mime_type', 'size'];
+    protected $fillable = ['title', 'file_path', 'mime_type','file_img', 'size'];
 
     protected $table = 'librairies';
 

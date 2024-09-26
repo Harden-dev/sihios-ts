@@ -123,67 +123,42 @@ class LibrairieController extends Controller
 
     public function store(Request $request)
     {
-        Log::info('Début de la méthode store');
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            Log::info('Informations sur le fichier', [
-                'original_name' => $file->getClientOriginalName(),
-                'mime_type' => $file->getMimeType(),
-                'extension' => $file->getClientOriginalExtension(),
-                'size' => $file->getSize()
-            ]);
-            Log::info('Détails de la validation', [
-                'file_size' => $request->file('file')->getSize(),
-                'max_size' => 10 * 1024 * 1024,
-                'is_valid' => $request->file('file')->getSize() <= 10 * 1024 * 1024
-            ]);
-        } else {
-            Log::error('Aucun fichier n\'a été uploadé');
-        }
+        // Log::info($request->all());
+        // Validation des fichiers
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'auteurs' => 'required|array',
+            'auteurs.*:auteurs,id',
+            'file' => ['required', 'file', new AllowedFileType],
+            'file_img' => ['required', 'image',  'max:20480'], // Validation pour l'image
+        ]);
 
         try {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'auteurs' => 'required|array',
-                'auteurs.*:auteurs,id',
-                'file' => ['required', 'file', new AllowedFileType, 'max:20480'],
-            ]);
-            Log::info('Validation réussie');
-        } catch (ValidationException $e) {
-            Log::error('Erreur de validation', ['errors' => $e->errors()]);
-            return response()->json(['errors' => $e->errors()], 422);
-        }
-        try {
-
+            // Traitement du fichier principal
             $file = $request->file('file');
-            //Log::info('Uploaded file:', $file->toArray());
-
-            $allowedMimeTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-            if (!in_array($file->getClientMimeType(), $allowedMimeTypes)) {
-
-                // Log::error('Invalid file type:', $file->getClientMimeType());
-                return response()->json(['error' => 'Le fichier doit être un PDF ou un document Word.'], 422);
-            }
-
-            // Log::info('File mime type:', $file->getClientMimeType());
-
             $path = $file->store('', 'librairie');
 
-            //  Log::info('File stored at:', $path);
-
+            // Traitement de l'image
+            if ($request->hasFile('file_img')) { // Vérification si le fichier image est présent
+                $fileImg = $request->file('file_img');
+                $pathImg = $fileImg->store('', 'librairie');
+            } else {
+                throw new Exception('Image file is required.'); // Gérer l'absence de fichier image
+            }
             $librairie = Librairie::create([
                 'title' => $request->title,
+                'file_img' => $pathImg,
                 'file_path' => $path,
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
             ]);
+            Log::info($librairie);
 
             $librairie->auteurs()->attach($request->auteurs);
             $auteurs = $librairie->auteurs()->pluck('name')->toArray();
             return response()->json(['librairie' => $librairie, 'auteurs' => $auteurs], 201);
         } catch (Exception $th) {
-            //Log::error('Exception:', $th->getMessage());
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
@@ -213,7 +188,8 @@ class LibrairieController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Détails de la librairie récupérés avec succès",
+     *         description="Détails de la librairie récupérés avec suc
+     * cès",
      *         @OA\JsonContent(ref="#/components/schemas/Librairie")
      *     ),
      *     @OA\Response(

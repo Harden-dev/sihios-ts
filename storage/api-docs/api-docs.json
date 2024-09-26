@@ -412,6 +412,76 @@
                 ]
             }
         },
+        "/admin/change-status/{id}/member": {
+            "put": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Changer le statut d'un membre (activer/désactiver)",
+                "operationId": "4e2875f2412b4de5f6fc5f447b502428",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du membre à activer ou désactiver",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statut du membre changé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Activation réussie"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Membre non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Membre non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur lors de la modification du statut",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/auteur": {
             "get": {
                 "tags": [
@@ -597,6 +667,77 @@
                         "Bearer": []
                     }
                 ]
+            }
+        },
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Récupérer toutes les catégories",
+                "operationId": "5c69972b5f2aafab9b1f57c7b61eb465",
+                "responses": {
+                    "200": {
+                        "description": "Liste des catégories récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Categorie"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Créer une nouvelle catégorie",
+                "operationId": "e58d42a0cf06be80b5b8143003372bad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "label"
+                                ],
+                                "properties": {
+                                    "label": {
+                                        "type": "string",
+                                        "example": "Nouvelle Catégorie"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Catégorie créée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Categorie"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                }
             }
         },
         "/contact": {
@@ -1328,7 +1469,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Détails de la librairie récupérés avec succès",
+                        "description": "Détails de la librairie récupérés avec suc\n     * cès",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2183,6 +2324,32 @@
                 },
                 "type": "object"
             },
+            "Categorie": {
+                "title": "Categorie",
+                "description": "Modèle de catégorie",
+                "properties": {
+                    "id": {
+                        "description": "Identifiant unique de la catégorie",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "label": {
+                        "description": "Label de la catégorie",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Date de création de la catégorie",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Date de mise à jour de la catégorie",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
             "Event": {
                 "properties": {
                     "id": {
@@ -2314,6 +2481,10 @@
         {
             "name": "Auth",
             "description": "Auth"
+        },
+        {
+            "name": "Categories",
+            "description": "Categories"
         },
         {
             "name": "Contact",

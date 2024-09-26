@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuteurController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CategorieController;
 use App\Http\Controllers\API\ContactController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\ForgortPasswordController;
@@ -64,6 +65,7 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::get('/admin/active', [AdminController::class, 'getActiveMember']);
     Route::get('/admin/all-member', [AdminController::class, 'getAllMember']);
     Route::get('/admin/admin-list', [AdminController::class, 'getAdmin']);
+    Route::post('/admin/change-status/{id}/member', [AdminController::class, 'changeMemberStatus']);
 
     Route::post('/librairie', [LibrairieController::class, 'store']);
     Route::put('/librairie/{id}', [LibrairieController::class, 'update']);
@@ -80,6 +82,8 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::post('/parcours/store', [ParcourController::class, 'store']);
     Route::put('/parcours/update/{id}', [ParcourController::class, 'update']);
     Route::delete('/parcours/delete/{id}', [ParcourController::class, 'destroy']);
+
+    Route::post('/admin/categorie', [CategorieController::class, 'store']);
 });
 
 #design by softskills
