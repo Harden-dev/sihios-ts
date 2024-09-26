@@ -36,6 +36,11 @@ class LibrairieController extends Controller
      *         type="string",
      *         description="Chemin du fichier téléchargé"
      *     ),
+     * @OA\Property(
+     *         property="file_img",
+     *         type="string",
+     *         description="Chemin de l'image téléchargé"
+     *     ),
      *     @OA\Property(
      *         property="mime_type",
      *         type="string",
@@ -105,8 +110,10 @@ class LibrairieController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="title", type="string", example="Titre de la librairie"),
      *             @OA\Property(property="auteurs", type="array", @OA\Items(type="integer"), example={1, 2}),
-     *             @OA\Property(property="file", type="string", format="binary", description="Fichier à télécharger")
-     *         )
+     *             @OA\Property(property="file", type="string", format="binary", description="Fichier à télécharger"),
+     *             @OA\Property(property="file_img", type="string", format="binary", description="Image à télécharger"),
+     *          )
+     *         
      *     ),
      *     @OA\Response(
      *         response=201,

@@ -180,14 +180,13 @@ class AuthController extends Controller
         }
 
         $user = Auth::guard('api')->user();
-        Log::info($user);
         if (!$user) {
             return response()->json(['error' => 'Utilisateur non trouvé'], 404);
         }
 
-        if ($user->status !== 'approved') {
+        if ($user->deleted_at) {
             Auth::guard('api')->logout();
-            return response()->json(['error' => 'Utilisateur non actif'], 403);
+            return response()->json(['error' => 'Votre est désactivé, contacter votre administrateur'], 403);
         }
 
         return $this->respondWithToken($token);

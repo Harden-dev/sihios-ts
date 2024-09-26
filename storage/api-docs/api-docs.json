@@ -1405,6 +1405,11 @@
                                         "description": "Fichier à télécharger",
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "file_img": {
+                                        "description": "Image à télécharger",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -2393,6 +2398,10 @@
                     },
                     "file_path": {
                         "description": "Chemin du fichier téléchargé",
+                        "type": "string"
+                    },
+                    "file_img": {
+                        "description": "Chemin de l'image téléchargé",
                         "type": "string"
                     },
                     "mime_type": {
