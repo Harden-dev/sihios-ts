@@ -135,6 +135,7 @@ class LibrairieController extends Controller
         // Validation des fichiers
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'categorie_id'  => 'required',
             'auteurs' => 'required|array',
             'auteurs.*:auteurs,id',
             'file' => ['required', 'file', new AllowedFileType],
@@ -155,6 +156,7 @@ class LibrairieController extends Controller
             }
             $librairie = Librairie::create([
                 'title' => $request->title,
+                'categorie_id' => $request->categorie_id,
                 'file_img' => $pathImg,
                 'file_path' => $path,
                 'mime_type' => $file->getClientMimeType(),

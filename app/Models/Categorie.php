@@ -12,4 +12,9 @@ class Categorie extends Model
     protected $fillable = [
         'label',
     ];
+
+    public function librairies()
+    {
+        return $this->hasMany(Librairie::class, 'categorie_id');
+    }
 }
