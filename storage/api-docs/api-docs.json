@@ -669,13 +669,13 @@
                 ]
             }
         },
-        "/api/categories": {
+        "/api/admin/categorie": {
             "get": {
                 "tags": [
                     "Categories"
                 ],
                 "summary": "Récupérer toutes les catégories",
-                "operationId": "5c69972b5f2aafab9b1f57c7b61eb465",
+                "operationId": "30bec28bdf8b5522fb486b4ecb1ffac7",
                 "responses": {
                     "200": {
                         "description": "Liste des catégories récupérée avec succès",
@@ -700,7 +700,7 @@
                     "Categories"
                 ],
                 "summary": "Créer une nouvelle catégorie",
-                "operationId": "e58d42a0cf06be80b5b8143003372bad",
+                "operationId": "8592b1bc57acba0c6e45f9681c5f1253",
                 "requestBody": {
                     "required": true,
                     "content": {

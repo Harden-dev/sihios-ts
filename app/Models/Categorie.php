@@ -17,4 +17,5 @@ class Categorie extends Model
     {
         return $this->hasMany(Librairie::class, 'categorie_id');
     }
+
 }

@@ -48,7 +48,7 @@ class CategorieController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/categories",
+     *     path="/api/admin/categorie",
      *     tags={"Categories"},
      *     summary="Récupérer toutes les catégories",
      *     @OA\Response(
@@ -69,7 +69,7 @@ class CategorieController extends Controller
     }
     /**
      * @OA\Post(
-     *     path="/api/categories",
+     *     path="/api/admin/categorie",
      *     tags={"Categories"},
      *     summary="Créer une nouvelle catégorie",
      *     @OA\RequestBody(
