@@ -39,7 +39,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
@@ -58,26 +58,26 @@ return [
 
         'librairie' => [
             'driver' => 'local',
-            'root' => storage_path('app/librairie'),
-            'url' => env('APP_URL').'/librairies',
-            'visibility' => 'private',
+            'root' => storage_path('app/public/librairie'), // Chemin où les fichiers seront stockés
+            'url' => env('APP_URL') . '/storage/librairie', // URL pour accéder aux fichiers
+            'visibility' => 'public', // Visibilité publique
             'throw' => false,
         ],
 
-        'event'=> [
+        'event' => [
             'driver' => 'local',
-            'root' => storage_path('app/eventFile'),
-            'url' => env('APP_URL').'/events',
-            'visibility' => 'private',
+            'root' => storage_path('app/public/eventFile'),
+            'url' => env('APP_URL') . '/storage/eventFile',
+            'visibility' => 'public',
             'throw' => false,
         ],
 
 
-        'parcours'=> [
+        'parcours' => [
             'driver' => 'local',
-            'root' => storage_path('app/parcours'),
-            'url' => env('APP_URL').'/parcours',
-            'visibility' => 'private',
+            'root' => storage_path('app/public/parcours'),
+            'url' => env('APP_URL') . '/storage/parcours',
+            'visibility' => 'public',
             'throw' => false,
         ]
 

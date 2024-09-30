@@ -186,7 +186,7 @@ class LibrairieController extends Controller
     {
         $file = Librairie::findOrFail($id);
 
-        return response()->file(storage_path('app/librairie/' . $file->file_path));
+        return response()->file(storage_path('app/public/librairie/' . $file->file_path));
     }
 
 
