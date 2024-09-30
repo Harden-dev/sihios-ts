@@ -69,7 +69,7 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
 
     Route::post('/librairie', [LibrairieController::class, 'store']);
     Route::put('/librairie/{id}', [LibrairieController::class, 'update']);
-    Route::delete('/librairie/{id}', [LibrairieController::class, 'destroy']);
+    Route::delete('/librairie/delete/{id}', [LibrairieController::class, 'destroy']);
 
     Route::get('/auteur', [AuteurController::class, 'index']);
     Route::post('/auteur', [AuteurController::class, 'store']);
