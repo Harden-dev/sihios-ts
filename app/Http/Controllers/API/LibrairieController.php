@@ -96,6 +96,11 @@ class LibrairieController extends Controller
 
 
         $librairies = Librairie::query()->paginate($perPage);
+        
+        foreach ($librairies as $librairie) {
+            $librairie->file_url = asset('storage/librairie/' . $librairie->file_path);
+            $librairie->image_url = asset('storage/librairie/' . $librairie->file_img);
+        }
         return response()->json($librairies);
     }
 
@@ -173,7 +178,7 @@ class LibrairieController extends Controller
             return response()->json([
                 'librairie' => $librairie,
                 'auteurs' => $auteurs,
-               
+
             ], 201);
         } catch (Exception $th) {
             return response()->json(['error' => $th->getMessage()], 500);
