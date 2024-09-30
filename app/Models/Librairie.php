@@ -17,4 +17,9 @@ class Librairie extends Model
     {
         return $this->belongsToMany(Auteur::class, 'librairie_auteur');
     }
+
+    public function categorie()
+    {
+        return $this->belongsTo(Categorie::class, 'categorie_id');
+    }
 }

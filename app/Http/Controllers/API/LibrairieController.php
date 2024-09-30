@@ -96,7 +96,7 @@ class LibrairieController extends Controller
 
 
         $librairies = Librairie::query()->paginate($perPage);
-        
+
         foreach ($librairies as $librairie) {
             $librairie->file_url = asset('storage/librairie/' . $librairie->file_path);
             $librairie->image_url = asset('storage/librairie/' . $librairie->file_img);
@@ -354,14 +354,24 @@ class LibrairieController extends Controller
      * )
      */
 
-    public function destroy($id)
-    {
-        $file = Librairie::findOrFail($id);
-        $filePath = $file->file_path;
-        Storage::disk('librairie')->delete($filePath);
-        $file->delete();
-        return response()->json(['message' => 'Librairie deleted']);
-    }
+     public function destroy($id)
+     {
+         // Trouver la librairie à supprimer
+         $librairie = Librairie::findOrFail($id);
+         
+         // Supprimer les auteurs associés
+         $librairie->auteurs()->detach(); // Detach tous les auteurs associés
+     
+         // Supprimer le fichier stocké
+         $filePath = $librairie->file_path;
+         Storage::disk('librairie')->delete($filePath);
+     
+         // Supprimer la librairie
+         $librairie->delete();
+         
+         return response()->json(['message' => 'Librairie deleted']);
+     }
+     
 
 
     /**
