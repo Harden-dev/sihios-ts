@@ -159,7 +159,7 @@ class ParcourController extends Controller
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
             ]);
-
+            $parcours->file_url = asset('storage/parcours/' . $path);
             return response()->json($parcours, 201);
         } catch (Exception $th) {
 

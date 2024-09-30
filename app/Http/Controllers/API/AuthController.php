@@ -116,6 +116,14 @@ class AuthController extends Controller
         // return $this->respondWithToken($token);
     }
 
+
+
+    /**
+     * Get a JWT via given credentials.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     /**
      * @OA\Post(
      *     path="/login",
@@ -143,13 +151,6 @@ class AuthController extends Controller
      *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
      *     )
      * )
-     */
-
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
@@ -192,6 +193,13 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     /**
      * @OA\Get(
      *     path="/me",
@@ -210,17 +218,19 @@ class AuthController extends Controller
      *     )
      * )
      */
-
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function me()
     {
         return response()->json(Auth::guard('api')->user());
     }
 
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+     
     /**
      * @OA\Post(
      *     path="/logout",
@@ -233,12 +243,6 @@ class AuthController extends Controller
      *     )
      * )
      */
-
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function logout()
     {
         Auth::guard('api')->logout();
@@ -246,7 +250,14 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+   
+
     /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+     /**
      * @OA\Post(
      *     path="/refresh",
      *     tags={"Auth"},
@@ -261,12 +272,6 @@ class AuthController extends Controller
      *         )
      *     )
      * )
-     */
-
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function refresh()
     {

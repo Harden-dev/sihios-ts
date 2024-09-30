@@ -152,6 +152,10 @@ class EventController extends Controller
                 'size' => $file->getSize(),
             ]);
 
+            $events->file_url = asset('storage/eventFile/' . $path);
+     
+
+
             return response()->json($events, 201);
         } catch (Exception $th) {
 

@@ -166,7 +166,15 @@ class LibrairieController extends Controller
 
             $librairie->auteurs()->attach($request->auteurs);
             $auteurs = $librairie->auteurs()->pluck('name')->toArray();
-            return response()->json(['librairie' => $librairie, 'auteurs' => $auteurs], 201);
+
+            $librairie->file_url = asset('storage/librairie/' . $path);
+            $librairie->image_url = asset('storage/librairie/' . $pathImg);
+
+            return response()->json([
+                'librairie' => $librairie,
+                'auteurs' => $auteurs,
+               
+            ], 201);
         } catch (Exception $th) {
             return response()->json(['error' => $th->getMessage()], 500);
         }
