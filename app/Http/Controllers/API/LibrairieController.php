@@ -171,13 +171,13 @@ class LibrairieController extends Controller
 
             $librairie->auteurs()->attach($request->auteurs);
             $auteurs = $librairie->auteurs()->pluck('name')->toArray();
-
+            $librairie->load('auteurs');
             $librairie->file_url = asset('storage/librairie/' . $path);
             $librairie->image_url = asset('storage/librairie/' . $pathImg);
 
             return response()->json([
                 'librairie' => $librairie,
-                'auteurs' => $auteurs,
+                //'auteurs' => $auteurs,
 
             ], 201);
         } catch (Exception $th) {
@@ -277,28 +277,32 @@ class LibrairieController extends Controller
     {
         $librairie = Librairie::find($id);
         if (!$librairie) {
-            return response()->json(['error' => 'Librairie not found'], 404);
+            return response()->json(['error' => 'Librairie non trouvée'], 404);
         }
 
+        // Validation des champs du formulaire avec des champs optionnels
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'categorie_id' => 'sometimes|integer',
+            'auteurs' => 'sometimes|array',
+            'auteurs.*:auteurs,id',
+            'file' => ['nullable', 'file', new AllowedFileType],
+            'file_img' => ['nullable', 'image', 'max:20480'], // Image optionnelle lors de la mise à jour
+        ]);
+
         try {
+            // Mise à jour du titre et de la catégorie s'ils sont fournis
+            if ($request->filled('title')) {
+                $librairie->title = $request->title;
+            }
+            if ($request->filled('categorie_id')) {
+                $librairie->categorie_id = $request->categorie_id;
+            }
 
-            // Valider les champs du formulaire
-            Log::info("Titre : " . $request->title);
-            Log::alert($request->all());
-            $request->validate([
-                'title' => 'sometimes|string|max:255',
-                'file' => 'nullable|file|mimes:pdf,docx|max:10240', // 10MB max
-            ]);
-
-            // Mettre à jour le titre
-            $librairie->title = $request->title;
-            Log::info("Titre mis à jour : " . $librairie->title);
-
-            // Vérifier si un fichier est uploadé
+            // Gestion du fichier principal (PDF, etc.)
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                Log::info("Fichier uploadé : " . $file);
-                // Supprimer l'ancien fichier si présent
+                // Supprimer l'ancien fichier
                 if ($librairie->file_path) {
                     Storage::disk('librairie')->delete($librairie->file_path);
                 }
@@ -306,21 +310,50 @@ class LibrairieController extends Controller
                 // Stocker le nouveau fichier
                 $path = $file->store('', 'librairie');
                 $librairie->file_path = $path;
-
-                // Mettre à jour les autres informations du fichier
                 $librairie->mime_type = $file->getClientMimeType();
                 $librairie->size = $file->getSize();
+            }
+
+            // Gestion de l'image de couverture
+            if ($request->hasFile('file_img')) {
+                $fileImg = $request->file('file_img');
+                // Supprimer l'ancienne image
+                if ($librairie->file_img) {
+                    Storage::disk('librairie')->delete($librairie->file_img);
+                }
+
+                // Stocker la nouvelle image
+                $pathImg = $fileImg->store('', 'librairie');
+                $librairie->file_img = $pathImg;
+            }
+
+            // Mise à jour des auteurs si fournis
+            if ($request->filled('auteurs')) {
+                // Sync permet de remplacer les anciens auteurs par les nouveaux
+                $librairie->auteurs()->sync($request->auteurs);
             }
 
             // Enregistrer les modifications
             $librairie->save();
 
-            return response()->json(['message' => 'Mise à jour réussie', 'librairie' => $librairie]);
+            // Recharger la relation auteurs et générer les URLs pour les fichiers
+            $librairie->load('auteurs'); // Charger les relations auteurs
+            $librairie->file_url = asset('storage/librairie/' . $librairie->file_path);
+            $librairie->image_url = asset('storage/librairie/' . $librairie->file_img);
+            $auteurs = $librairie->auteurs()->pluck('name')->toArray();
+
+            return response()->json([
+                'message' => 'Mise à jour réussie',
+                'librairie' => $librairie,  // Inclut toutes les données mises à jour
+                //'auteurs' => $auteurs,
+            ]);
         } catch (Exception $th) {
             Log::error('Erreur lors de la mise à jour : ' . $th->getMessage());
-            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.'], 500);
+            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour : ' . $th->getMessage()], 500);
         }
     }
+
+
 
 
     /**
@@ -354,24 +387,24 @@ class LibrairieController extends Controller
      * )
      */
 
-     public function destroy($id)
-     {
-         // Trouver la librairie à supprimer
-         $librairie = Librairie::findOrFail($id);
-         
-         // Supprimer les auteurs associés
-         $librairie->auteurs()->detach(); // Detach tous les auteurs associés
-     
-         // Supprimer le fichier stocké
-         $filePath = $librairie->file_path;
-         Storage::disk('librairie')->delete($filePath);
-     
-         // Supprimer la librairie
-         $librairie->delete();
-         
-         return response()->json(['message' => 'Librairie deleted']);
-     }
-     
+    public function destroy($id)
+    {
+        // Trouver la librairie à supprimer
+        $librairie = Librairie::findOrFail($id);
+
+        // Supprimer les auteurs associés
+        $librairie->auteurs()->detach(); // Detach tous les auteurs associés
+
+        // Supprimer le fichier stocké
+        $filePath = $librairie->file_path;
+        Storage::disk('librairie')->delete($filePath);
+
+        // Supprimer la librairie
+        $librairie->delete();
+
+        return response()->json(['message' => 'Librairie deleted']);
+    }
+
 
 
     /**
