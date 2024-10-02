@@ -170,7 +170,7 @@ class LibrairieController extends Controller
             Log::info($librairie);
 
             $librairie->auteurs()->attach($request->auteurs);
-            $auteurs = $librairie->auteurs()->pluck('name')->toArray();
+            
             $librairie->load('auteurs');
             $librairie->file_url = asset('storage/librairie/' . $path);
             $librairie->image_url = asset('storage/librairie/' . $pathImg);

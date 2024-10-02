@@ -55,7 +55,7 @@ class EventController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/events",
+     *     path="/event",
      *     summary="Lister les événements",
      * security={{"Bearer": {}}},
      *     tags={"Event"},
@@ -88,7 +88,7 @@ class EventController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/events",
+     *     path="/event",
      *     summary="Créer un nouvel événement",
      * security={{"Bearer": {}}},
      *     tags={"Event"},
