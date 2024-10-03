@@ -83,6 +83,10 @@ class EventController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $events = Event::query()->paginate($perPage);
+        foreach ($events as $event) {
+            $event->file_url = asset('storage/eventFile/' . $event->file_path);
+         
+        }
         return response()->json($events);
     }
 
