@@ -10,6 +10,7 @@ use App\Http\Controllers\API\ForgortPasswordController;
 use App\Http\Controllers\API\LibrairieController;
 use App\Http\Controllers\API\NewsletterController;
 use App\Http\Controllers\API\ParcourController;
+use App\Http\Controllers\ConditionController;
 use App\Models\Parcour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,7 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::post('/admin/change-status/{id}/member', [AdminController::class, 'changeMemberStatus']);
 
     Route::post('/librairie', [LibrairieController::class, 'store']);
+    Route::get('/librairie/detail/{id}', [LibrairieController::class, 'showInfo']);
     Route::put('/librairie/{id}', [LibrairieController::class, 'update']);
     Route::delete('/librairie/delete/{id}', [LibrairieController::class, 'destroy']);
 
@@ -82,6 +84,11 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::post('/parcours/store', [ParcourController::class, 'store']);
     Route::put('/parcours/update/{id}', [ParcourController::class, 'update']);
     Route::delete('/parcours/delete/{id}', [ParcourController::class, 'destroy']);
+
+    Route::get('/conditions-acces', [ConditionController::class, 'index']);
+    Route::post('/conditions-acces-store', [ConditionController::class, 'store']);
+    Route::put('/conditions-update/{id}', [ConditionController::class, 'update']);
+    Route::delete('/conditions-delete/{id}', [ConditionController::class, 'destroy']);
 
     Route::post('/admin/categorie', [CategorieController::class, 'store']);
 });

@@ -93,6 +93,7 @@ class ParcourController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $parcours = Parcour::query()->paginate($perPage);
+        $parcours->load('conditions');
         return response()->json($parcours);
     }
 
@@ -131,6 +132,8 @@ class ParcourController extends Controller
             $validated = $request->validate([
                 'label' => 'required|string|max:255',
                 'field' => 'required|string|max:255',
+                'conditons' => 'sometimes|array',
+                'conditions.*' => 'exists:conditions,id',
                 'description' => 'nullable|string|max:255',
                 'file' => ['required', 'file', new AllowedFileType, 'max:20480'],
             ]);
@@ -159,6 +162,8 @@ class ParcourController extends Controller
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
             ]);
+            $parcours->conditions()->attach($request->conditions);
+            $parcours->load('conditions');
             $parcours->file_url = asset('storage/parcours/' . $path);
             return response()->json($parcours, 201);
         } catch (Exception $th) {
@@ -201,6 +206,7 @@ class ParcourController extends Controller
     public function showParcoursDetail($id)
     {
         $parcours = Parcour::findOrFail($id);
+        $parcours->load('conditions');
 
         return response()->json(["parcours" => $parcours], 200);
     }
@@ -257,6 +263,8 @@ class ParcourController extends Controller
             $request->validate([
                 'label' => 'required|string|max:255',
                 'field' => 'required|string|max:255',
+                'conditons' => 'sometimes|array',
+                'conditions.*' => 'exists:conditions,id',
                 'description' => 'sometimes|string|max:255',
                 'file' => 'nullable|file|mimes:pdf,docx,jpg,jpeg,png,gif|max:10240', // 10MB max
             ]);
@@ -285,10 +293,11 @@ class ParcourController extends Controller
                 $parcours->size = $file->getSize();
             }
 
+            $parcours->conditions()->sync($request->conditions);
             // Enregistrer les modifications
             $parcours->save();
-
-            return response()->json(['message' => 'Mise à jour réussie', 'event' => $parcours]);
+            $parcours->load('conditions');
+            return response()->json(['message' => 'Mise à jour réussie', 'parcours' => $parcours]);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         }

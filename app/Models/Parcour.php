@@ -18,4 +18,9 @@ class Parcour extends Model
         'mime_type',
         'size'
     ];
+
+    public function conditions()
+    {
+        return $this->belongsToMany(Condition::class, 'condition_parcour');
+    }
 }
