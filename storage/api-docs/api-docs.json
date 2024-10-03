@@ -908,6 +908,228 @@
                 }
             }
         },
+        "/conditions-acces": {
+            "get": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Get a list of conditions",
+                "operationId": "babcd10576fdcf4192f52f6ad1038e3b",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of conditions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "conditions": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Condition"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/conditions-acces-store": {
+            "post": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Create a new condition",
+                "operationId": "33f6a3222ace3e80abe61c525bfa92da",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "label": {
+                                        "type": "string",
+                                        "example": "Condition 1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Condition created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "conditions": {
+                                            "$ref": "#/components/schemas/Condition"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Validation failed"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/conditions-update/{id}": {
+            "put": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Update an existing condition",
+                "operationId": "cde7d1052d0db5e4779b3b76fcdba46f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the condition to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "label": {
+                                        "type": "string",
+                                        "example": "Updated Condition Label"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Condition updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "conditions": {
+                                            "$ref": "#/components/schemas/Condition"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Condition not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Condition not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/conditions-delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Delete a condition",
+                "operationId": "e1a88b1b1ed05f3b7ae5c26b9d84cef0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the condition to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Condition deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string",
+                                            "example": "suppression réussie"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Condition not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "condition non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/contact": {
             "post": {
                 "tags": [
@@ -980,13 +1202,13 @@
                 }
             }
         },
-        "/events": {
+        "/event": {
             "get": {
                 "tags": [
                     "Event"
                 ],
                 "summary": "Lister les événements",
-                "operationId": "e811bafd16bf18674fae61883bf2e926",
+                "operationId": "1db7372f262e469a249302ecb84569ac",
                 "parameters": [
                     {
                         "name": "per_page",
@@ -1036,7 +1258,7 @@
                     "Event"
                 ],
                 "summary": "Créer un nouvel événement",
-                "operationId": "5952b4568d746fcd156533d7ee722310",
+                "operationId": "1739c06117abcbc7e1c3366278ec59f4",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1542,40 +1764,44 @@
                         "Bearer": []
                     }
                 ]
-            },
+            }
+        },
+        "/api/librairies": {
             "post": {
                 "tags": [
                     "Librairies"
                 ],
                 "summary": "Créer une nouvelle librairie",
-                "operationId": "8517c5ea1d6a2461bf86ef508ec6c95c",
+                "operationId": "600b2402bb955369f2dab5a2c7990338",
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "title": {
+                                        "description": "Titre de la librairie",
                                         "type": "string",
-                                        "example": "Titre de la librairie"
+                                        "maxLength": 255
+                                    },
+                                    "categorie_id": {
+                                        "description": "ID de la catégorie",
+                                        "type": "integer"
                                     },
                                     "auteurs": {
+                                        "description": "Liste des IDs des auteurs",
                                         "type": "array",
                                         "items": {
                                             "type": "integer"
-                                        },
-                                        "example": [
-                                            1,
-                                            2
-                                        ]
+                                        }
                                     },
                                     "file": {
-                                        "description": "Fichier à télécharger",
+                                        "description": "Fichier principal (PDF, etc.)",
                                         "type": "string",
                                         "format": "binary"
                                     },
                                     "file_img": {
-                                        "description": "Image à télécharger",
+                                        "description": "Image de couverture",
                                         "type": "string",
                                         "format": "binary"
                                     }
@@ -1591,7 +1817,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Librairie"
+                                    "properties": {
+                                        "librairie": {
+                                            "$ref": "#/components/schemas/Librairie"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1602,10 +1833,17 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
                                         "errors": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
                                             }
                                         }
                                     },
@@ -1613,13 +1851,23 @@
                                 }
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             }
         },
         "/librairie/detail/{id}": {
@@ -1674,13 +1922,14 @@
                 ]
             }
         },
-        "/librairie/update/{id}": {
+        "/api/librairies/{id}": {
             "put": {
                 "tags": [
                     "Librairies"
                 ],
                 "summary": "Mettre à jour une librairie existante",
-                "operationId": "9a6347f8c910be5f763dcd3f85930083",
+                "description": "Met à jour les détails d'une librairie, y compris les fichiers associés et les auteurs",
+                "operationId": "8f7f7a767166c571c7ffb165e2accdfd",
                 "parameters": [
                     {
                         "name": "id",
@@ -1695,15 +1944,31 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "title": {
-                                        "type": "string",
-                                        "example": "Titre mis à jour"
+                                        "description": "Nouveau titre de la librairie",
+                                        "type": "string"
+                                    },
+                                    "categorie_id": {
+                                        "description": "Nouvel ID de la catégorie",
+                                        "type": "integer"
+                                    },
+                                    "auteurs": {
+                                        "description": "Nouveaux IDs des auteurs associés",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
                                     },
                                     "file": {
-                                        "description": "Fichier à télécharger (optionnel)",
+                                        "description": "Nouveau fichier principal (optionnel)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "file_img": {
+                                        "description": "Nouvelle image de couverture (optionnelle)",
                                         "type": "string",
                                         "format": "binary"
                                     }
@@ -1719,7 +1984,16 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Librairie"
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Mise à jour réussie"
+                                        },
+                                        "librairie": {
+                                            "$ref": "#/components/schemas/Librairie"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1731,7 +2005,8 @@
                                 "schema": {
                                     "properties": {
                                         "error": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Librairie non trouvée"
                                         }
                                     },
                                     "type": "object"
@@ -1745,10 +2020,17 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
                                         "errors": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
                                             }
                                         }
                                     },
@@ -1758,13 +2040,14 @@
                         }
                     },
                     "500": {
-                        "description": "Erreur du serveur",
+                        "description": "Erreur serveur",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "error": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la mise à jour"
                                         }
                                     },
                                     "type": "object"
@@ -2116,25 +2399,35 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "label": {
+                                        "description": "Le titre du parcours",
                                         "type": "string",
                                         "example": "Titre du parcours"
                                     },
                                     "field": {
+                                        "description": "Le domaine d'étude du parcours",
                                         "type": "string",
                                         "example": "Domaine d'étude"
                                     },
                                     "description": {
+                                        "description": "Une description du parcours",
                                         "type": "string",
                                         "example": "Description du parcours"
                                     },
                                     "file": {
-                                        "description": "Fichier à télécharger",
+                                        "description": "Le fichier à télécharger (format binaire)",
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "conditions": {
+                                        "description": "Liste des IDs des conditions associées",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -2252,7 +2545,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "label": {
@@ -2268,9 +2561,16 @@
                                         "example": "Description mise à jour du parcours"
                                     },
                                     "file": {
-                                        "description": "Fichier à télécharger (optionnel)",
+                                        "description": "Nouveau fichier à télécharger",
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "conditions": {
+                                        "description": "Liste des IDs des conditions mises à jour",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -2296,7 +2596,8 @@
                                 "schema": {
                                     "properties": {
                                         "error": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Parcours non trouvé"
                                         }
                                     },
                                     "type": "object"
@@ -2523,6 +2824,38 @@
                 },
                 "type": "object"
             },
+            "Condition": {
+                "title": "Condition",
+                "description": "Condition Model",
+                "required": [
+                    "label"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID unique de la condition",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "label": {
+                        "description": "Nom ou label de la condition",
+                        "type": "string",
+                        "example": "Condition 1"
+                    },
+                    "created_at": {
+                        "description": "Date de création de la condition",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-10-02T15:11:06Z"
+                    },
+                    "updated_at": {
+                        "description": "Date de la dernière mise à jour",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-10-02T15:11:06Z"
+                    }
+                },
+                "type": "object"
+            },
             "Event": {
                 "properties": {
                     "id": {
@@ -2662,6 +2995,10 @@
         {
             "name": "Categories",
             "description": "Categories"
+        },
+        {
+            "name": "Conditions",
+            "description": "Conditions"
         },
         {
             "name": "Contact",

@@ -102,14 +102,44 @@ class ParcourController extends Controller
      *     path="/parcours/store",
      *     tags={"Parcours"},
      *     summary="Créer un nouveau parcours",
-     * security={{"Bearer": {}}},
+     *     security={{"Bearer": {}}},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="label", type="string", example="Titre du parcours"),
-     *             @OA\Property(property="field", type="string", example="Domaine d'étude"),
-     *             @OA\Property(property="description", type="string", example="Description du parcours"),
-     *             @OA\Property(property="file", type="string", format="binary", description="Fichier à télécharger")
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="label",
+     *                     type="string",
+     *                     example="Titre du parcours",
+     *                     description="Le titre du parcours"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="field",
+     *                     type="string",
+     *                     example="Domaine d'étude",
+     *                     description="Le domaine d'étude du parcours"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     type="string",
+     *                     example="Description du parcours",
+     *                     description="Une description du parcours"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="file",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="Le fichier à télécharger (format binaire)"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="conditions",
+     *                     type="array",
+     *                     @OA\Items(type="integer"),
+     *                     description="Liste des IDs des conditions associées"
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -120,10 +150,18 @@ class ParcourController extends Controller
      *     @OA\Response(
      *         response=422,
      *         description="Erreur de validation",
-     *         @OA\JsonContent(type="object", @OA\Property(property="errors", type="array", @OA\Items(type="string")))
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="array",
+     *                 @OA\Items(type="string")
+     *             )
+     *         )
      *     )
      * )
      */
+
 
     public function store(Request $request)
     {
@@ -217,21 +255,30 @@ class ParcourController extends Controller
      *     path="/parcours/update/{id}",
      *     tags={"Parcours"},
      *     summary="Mettre à jour un parcours existant",
-     * security={{"Bearer": {}}},
+     *     security={{"Bearer": {}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         required=true,
      *         description="ID du parcours à mettre à jour",
+     *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="label", type="string", example="Titre mis à jour du parcours"),
-     *             @OA\Property(property="field", type="string", example="Domaine d'étude mis à jour"),
-     *             @OA\Property(property="description", type="string", example="Description mise à jour du parcours"),
-     *             @OA\Property(property="file", type="string", format="binary", description="Fichier à télécharger (optionnel)")
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(property="label", type="string", example="Titre mis à jour du parcours"),
+     *                 @OA\Property(property="field", type="string", example="Domaine d'étude mis à jour"),
+     *                 @OA\Property(property="description", type="string", example="Description mise à jour du parcours"),
+     *                 @OA\Property(property="file", type="string", format="binary", description="Nouveau fichier à télécharger"),
+     *                 @OA\Property(
+     *                     property="conditions",
+     *                     type="array",
+     *                     @OA\Items(type="integer"),
+     *                     description="Liste des IDs des conditions mises à jour"
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -242,7 +289,7 @@ class ParcourController extends Controller
      *     @OA\Response(
      *         response=404,
      *         description="Parcours non trouvé",
-     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Parcours non trouvé"))
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -251,6 +298,7 @@ class ParcourController extends Controller
      *     )
      * )
      */
+
 
     public function update(Request $request, $id)
     {
@@ -331,6 +379,7 @@ class ParcourController extends Controller
     public function destroy($id)
     {
         $file = Parcour::findOrFail($id);
+        $file->conditions()->detach();
         $filePath = $file->file_path;
         Storage::disk('parcours')->delete($filePath);
         $file->delete();
