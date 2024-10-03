@@ -94,6 +94,10 @@ class ParcourController extends Controller
 
         $parcours = Parcour::query()->paginate($perPage);
         $parcours->load('conditions');
+        foreach ($parcours as $parcour) {
+            $parcour->file_url = asset('storage/parcours/' . $parcour->file_path);
+         
+        }
         return response()->json($parcours);
     }
 
