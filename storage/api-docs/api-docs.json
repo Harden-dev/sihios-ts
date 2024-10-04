@@ -908,228 +908,6 @@
                 }
             }
         },
-        "/conditions-acces": {
-            "get": {
-                "tags": [
-                    "Conditions"
-                ],
-                "summary": "Get a list of conditions",
-                "operationId": "babcd10576fdcf4192f52f6ad1038e3b",
-                "parameters": [
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "Number of items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 10
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of conditions",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "conditions": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Condition"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/conditions-acces-store": {
-            "post": {
-                "tags": [
-                    "Conditions"
-                ],
-                "summary": "Create a new condition",
-                "operationId": "33f6a3222ace3e80abe61c525bfa92da",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "label": {
-                                        "type": "string",
-                                        "example": "Condition 1"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Condition created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "conditions": {
-                                            "$ref": "#/components/schemas/Condition"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Validation failed"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/conditions-update/{id}": {
-            "put": {
-                "tags": [
-                    "Conditions"
-                ],
-                "summary": "Update an existing condition",
-                "operationId": "cde7d1052d0db5e4779b3b76fcdba46f",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the condition to update",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "label": {
-                                        "type": "string",
-                                        "example": "Updated Condition Label"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Condition updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "conditions": {
-                                            "$ref": "#/components/schemas/Condition"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Condition not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Condition not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/conditions-delete/{id}": {
-            "delete": {
-                "tags": [
-                    "Conditions"
-                ],
-                "summary": "Delete a condition",
-                "operationId": "e1a88b1b1ed05f3b7ae5c26b9d84cef0",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the condition to delete",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Condition deleted successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "string",
-                                            "example": "suppression réussie"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Condition not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "condition non trouvé"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/contact": {
             "post": {
                 "tags": [
@@ -2422,11 +2200,11 @@
                                         "type": "string",
                                         "format": "binary"
                                     },
-                                    "conditions": {
-                                        "description": "Liste des IDs des conditions associées",
+                                    "condition_acces": {
+                                        "description": "Liste des conditions d'accès",
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "type": "string"
                                         }
                                     }
                                 },
@@ -2441,7 +2219,47 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Parcour"
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "label": {
+                                            "type": "string"
+                                        },
+                                        "field": {
+                                            "type": "string"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "file_path": {
+                                            "type": "string"
+                                        },
+                                        "mime_type": {
+                                            "type": "string"
+                                        },
+                                        "size": {
+                                            "type": "integer"
+                                        },
+                                        "condition_acces": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "file_url": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -2453,10 +2271,23 @@
                                 "schema": {
                                     "properties": {
                                         "errors": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -2561,15 +2392,14 @@
                                         "example": "Description mise à jour du parcours"
                                     },
                                     "file": {
-                                        "description": "Nouveau fichier à télécharger",
+                                        "description": "Nouveau fichier à télécharger (optionnel)",
                                         "type": "string",
                                         "format": "binary"
                                     },
-                                    "conditions": {
-                                        "description": "Liste des IDs des conditions mises à jour",
+                                    "condition_acces": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "type": "string"
                                         }
                                     }
                                 },
@@ -2584,7 +2414,56 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Parcour"
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Mise à jour réussie"
+                                        },
+                                        "parcours": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "label": {
+                                                    "type": "string"
+                                                },
+                                                "field": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "file_path": {
+                                                    "type": "string"
+                                                },
+                                                "mime_type": {
+                                                    "type": "string"
+                                                },
+                                                "size": {
+                                                    "type": "integer"
+                                                },
+                                                "condition_acces": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "file_url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -2597,7 +2476,7 @@
                                     "properties": {
                                         "error": {
                                             "type": "string",
-                                            "example": "Parcours non trouvé"
+                                            "example": "parcours not found"
                                         }
                                     },
                                     "type": "object"
@@ -2612,10 +2491,23 @@
                                 "schema": {
                                     "properties": {
                                         "errors": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -2824,38 +2716,6 @@
                 },
                 "type": "object"
             },
-            "Condition": {
-                "title": "Condition",
-                "description": "Condition Model",
-                "required": [
-                    "label"
-                ],
-                "properties": {
-                    "id": {
-                        "description": "ID unique de la condition",
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "label": {
-                        "description": "Nom ou label de la condition",
-                        "type": "string",
-                        "example": "Condition 1"
-                    },
-                    "created_at": {
-                        "description": "Date de création de la condition",
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-10-02T15:11:06Z"
-                    },
-                    "updated_at": {
-                        "description": "Date de la dernière mise à jour",
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-10-02T15:11:06Z"
-                    }
-                },
-                "type": "object"
-            },
             "Event": {
                 "properties": {
                     "id": {
@@ -2995,10 +2855,6 @@
         {
             "name": "Categories",
             "description": "Categories"
-        },
-        {
-            "name": "Conditions",
-            "description": "Conditions"
         },
         {
             "name": "Contact",

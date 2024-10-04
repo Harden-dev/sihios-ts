@@ -99,100 +99,98 @@ class ParcourController extends Controller
         return response()->json($parcours);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/parcours/store",
-     *     tags={"Parcours"},
-     *     summary="Créer un nouveau parcours",
-     *     security={{"Bearer": {}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 type="object",
-     *                 @OA\Property(
-     *                     property="label",
-     *                     type="string",
-     *                     example="Titre du parcours",
-     *                     description="Le titre du parcours"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="field",
-     *                     type="string",
-     *                     example="Domaine d'étude",
-     *                     description="Le domaine d'étude du parcours"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="description",
-     *                     type="string",
-     *                     example="Description du parcours",
-     *                     description="Une description du parcours"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="file",
-     *                     type="string",
-     *                     format="binary",
-     *                     description="Le fichier à télécharger (format binaire)"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="condition_acces",
-     *                     type="array",
-     *                     @OA\Items(type="string"),
-     *                     example=["Condition 1", "Condition 2"],
-     *                     description="Liste des conditions d'accès"
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Parcours créé avec succès",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="id", type="integer"),
-     *             @OA\Property(property="label", type="string"),
-     *             @OA\Property(property="field", type="string"),
-     *             @OA\Property(property="description", type="string"),
-     *             @OA\Property(property="file_path", type="string"),
-     *             @OA\Property(property="mime_type", type="string"),
-     *             @OA\Property(property="size", type="integer"),
-     *             @OA\Property(
-     *                 property="condition_acces",
-     *                 type="array",
-     *                 @OA\Items(type="string")
-     *             ),
-     *             @OA\Property(property="created_at", type="string", format="date-time"),
-     *             @OA\Property(property="updated_at", type="string", format="date-time"),
-     *             @OA\Property(property="file_url", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Erreur de validation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 additionalProperties=true
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Erreur serveur",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="error",
-     *                 type="string"
-     *             )
-     *         )
-     *     )
-     * )
-     */
-
+   /**
+ * @OA\Post(
+ *     path="/parcours/store",
+ *     tags={"Parcours"},
+ *     summary="Créer un nouveau parcours",
+ *     security={{"Bearer": {}}},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="label",
+ *                     type="string",
+ *                     example="Titre du parcours",
+ *                     description="Le titre du parcours"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="field",
+ *                     type="string",
+ *                     example="Domaine d'étude",
+ *                     description="Le domaine d'étude du parcours"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="description",
+ *                     type="string",
+ *                     example="Description du parcours",
+ *                     description="Une description du parcours"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="file",
+ *                     type="string",
+ *                     format="binary",
+ *                     description="Le fichier à télécharger (format binaire)"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="condition_acces",
+ *                     type="array",
+ *                     @OA\Items(type="string"),
+ *                     description="Liste des conditions d'accès"
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Parcours créé avec succès",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="id", type="integer"),
+ *             @OA\Property(property="label", type="string"),
+ *             @OA\Property(property="field", type="string"),
+ *             @OA\Property(property="description", type="string"),
+ *             @OA\Property(property="file_path", type="string"),
+ *             @OA\Property(property="mime_type", type="string"),
+ *             @OA\Property(property="size", type="integer"),
+ *             @OA\Property(
+ *                 property="condition_acces",
+ *                 type="array",
+ *                 @OA\Items(type="string")
+ *             ),
+ *             @OA\Property(property="created_at", type="string", format="date-time"),
+ *             @OA\Property(property="updated_at", type="string", format="date-time"),
+ *             @OA\Property(property="file_url", type="string")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Erreur de validation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 additionalProperties=true
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Erreur serveur",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="error",
+ *                 type="string"
+ *             )
+ *         )
+ *     )
+ * )
+ */
 
     public function store(Request $request)
     {
@@ -275,98 +273,96 @@ class ParcourController extends Controller
     }
 
 
-    /**
-     * @OA\Put(
-     *     path="/parcours/update/{id}",
-     *     tags={"Parcours"},
-     *     summary="Mettre à jour un parcours existant",
-     *     security={{"Bearer": {}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="ID du parcours à mettre à jour",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 @OA\Property(property="label", type="string", example="Titre mis à jour du parcours"),
-     *                 @OA\Property(property="field", type="string", example="Domaine d'étude mis à jour"),
-     *                 @OA\Property(property="description", type="string", example="Description mise à jour du parcours"),
-     *                 @OA\Property(property="file", type="string", format="binary", description="Nouveau fichier à télécharger (optionnel)"),
-     *                 @OA\Property(
-     *                     property="condition_acces",
-     *                     type="array",
-     *                     @OA\Items(type="string"),
-     *                     description="Liste des conditions d'accès mises à jour",
-     *                     example=["Baccalauréat", "Expérience professionnelle"]
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Parcours mis à jour avec succès",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="message", type="string", example="Mise à jour réussie"),
-     *             @OA\Property(
-     *                 property="parcours",
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="label", type="string"),
-     *                 @OA\Property(property="field", type="string"),
-     *                 @OA\Property(property="description", type="string"),
-     *                 @OA\Property(property="file_path", type="string"),
-     *                 @OA\Property(property="mime_type", type="string"),
-     *                 @OA\Property(property="size", type="integer"),
-     *                 @OA\Property(
-     *                     property="condition_acces",
-     *                     type="array",
-     *                     @OA\Items(type="string")
-     *                 ),
-     *                 @OA\Property(property="created_at", type="string", format="date-time"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time"),
-     *                 @OA\Property(property="file_url", type="string")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Parcours non trouvé",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="error", type="string", example="parcours not found")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Erreur de validation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 additionalProperties=true
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Erreur serveur",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="error",
-     *                 type="string"
-     *             )
-     *         )
-     *     )
-     * )
-     */
+  /**
+ * @OA\Put(
+ *     path="/parcours/update/{id}",
+ *     tags={"Parcours"},
+ *     summary="Mettre à jour un parcours existant",
+ *     security={{"Bearer": {}}},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID du parcours à mettre à jour",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="label", type="string", example="Titre mis à jour du parcours"),
+ *                 @OA\Property(property="field", type="string", example="Domaine d'étude mis à jour"),
+ *                 @OA\Property(property="description", type="string", example="Description mise à jour du parcours"),
+ *                 @OA\Property(property="file", type="string", format="binary", description="Nouveau fichier à télécharger (optionnel)"),
+ *                @OA\Property(
+ *                 property="condition_acces",
+ *                 type="array",
+ *                 @OA\Items(type="string")
+ *             ),
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Parcours mis à jour avec succès",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="message", type="string", example="Mise à jour réussie"),
+ *             @OA\Property(
+ *                 property="parcours",
+ *                 type="object",
+ *                 @OA\Property(property="id", type="integer"),
+ *                 @OA\Property(property="label", type="string"),
+ *                 @OA\Property(property="field", type="string"),
+ *                 @OA\Property(property="description", type="string"),
+ *                 @OA\Property(property="file_path", type="string"),
+ *                 @OA\Property(property="mime_type", type="string"),
+ *                 @OA\Property(property="size", type="integer"),
+ *                 @OA\Property(
+ *                     property="condition_acces",
+ *                     type="array",
+ *                     @OA\Items(type="string")
+ *                 ),
+ *                 @OA\Property(property="created_at", type="string", format="date-time"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time"),
+ *                 @OA\Property(property="file_url", type="string")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Parcours non trouvé",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="error", type="string", example="parcours not found")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Erreur de validation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 additionalProperties=true
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Erreur serveur",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="error",
+ *                 type="string"
+ *             )
+ *         )
+ *     )
+ * )
+ */
 
 
     public function update(Request $request, $id)
