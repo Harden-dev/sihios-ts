@@ -51,9 +51,10 @@ class AuteurController extends Controller
  * )
  */
 
-    public function index()
+    public function index(Request $request)
     {
-        $auteurs = Auteur::query();
+        $perPage = $request->input('per_page', 10);
+        $auteurs = Auteur::query()->paginate($perPage);
         return response()->json(['Auteurs' => $auteurs]);
     }
 

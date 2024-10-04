@@ -253,7 +253,7 @@ class LibrairieController extends Controller
     {
         $librairie = Librairie::findOrFail($id);
         $librairie->load('auteurs');
-        
+
         return response()->json(['librairie' => $librairie,], 200);
     }
 
@@ -339,11 +339,8 @@ class LibrairieController extends Controller
 
         $librairie = Librairie::find($id);
         if (!$librairie) {
-            Log::error('Librairie non trouvée');
-            return response()->json(['error' => 'Librairie not found'], 404);
+               return response()->json(['error' => 'Librairie not found'], 404);
         }
-
-        Log::info('Requête complète : ', ['request' => $request->all()]);
 
         // Validation des données entrantes
         $validated = $request->validate([
@@ -360,9 +357,9 @@ class LibrairieController extends Controller
             // Mise à jour des champs simples
 
             $librairie->title = $request->title;
-            Log::alert($librairie->title);
+         
             $librairie->categorie_id = $request->categorie_id;
-            Log::alert($librairie->title);
+         
 
             // Gestion du fichier principal (optionnel)
             if ($request->hasFile('file')) {
@@ -389,16 +386,17 @@ class LibrairieController extends Controller
             }
 
             // Mise à jour des auteurs
-            if ($request->filled('auteurs')) {
+    
 
                 $librairie->auteurs()->sync($request->auteurs);
-            }
+   
 
             $librairie->save();
 
             // Charger les relations et générer les URLs
 
             $librairie->load('auteurs');
+
             $librairie->file_url = asset('storage/librairie/' . $librairie->file_path);
             $librairie->image_url = asset('storage/librairie/' . $librairie->file_img);
 
@@ -407,7 +405,6 @@ class LibrairieController extends Controller
                 'librairie' => $librairie,
             ], 200);
         } catch (ValidationException $e) {
-
             return response()->json(['errors' => $e->errors()], 422);
         }
     }
