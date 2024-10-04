@@ -68,6 +68,7 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::get('/admin/admin-list', [AdminController::class, 'getAdmin']);
     Route::post('/admin/change-status/{id}/member', [AdminController::class, 'changeMemberStatus']);
 
+    Route::get('/librairie', [LibrairieController::class, 'index']);
     Route::post('/librairie', [LibrairieController::class, 'store']);
     Route::get('/librairie/detail/{id}', [LibrairieController::class, 'showInfo']);
     Route::put('/librairie/{id}', [LibrairieController::class, 'update']);
@@ -75,22 +76,24 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
 
     Route::get('/auteur', [AuteurController::class, 'index']);
     Route::post('/auteur', [AuteurController::class, 'store']);
+    Route::put('/auteur/update/{id}', [AuteurController::class, 'update']);
     Route::delete('/auteur/delete/{id}', [AuteurController::class, 'destroy']);
 
     Route::post('/event', [EventController::class, 'store']);
     Route::put('/event/update/{id}', [EventController::class, 'update']);
     Route::delete('/event/delete/{id}', [EventController::class, 'destroy']);
+    Route::get('/event', [EventController::class, 'index']);
 
+    Route::get('/parcours/list', [ParcourController::class, 'index']);
     Route::post('/parcours/store', [ParcourController::class, 'store']);
     Route::put('/parcours/update/{id}', [ParcourController::class, 'update']);
     Route::delete('/parcours/delete/{id}', [ParcourController::class, 'destroy']);
 
-    Route::get('/conditions-acces', [ConditionController::class, 'index']);
-    Route::post('/conditions-acces-store', [ConditionController::class, 'store']);
-    Route::put('/conditions-update/{id}', [ConditionController::class, 'update']);
-    Route::delete('/conditions-delete/{id}', [ConditionController::class, 'destroy']);
 
+    Route::get('/admin/categorie',[CategorieController::class, 'index']);
     Route::post('/admin/categorie', [CategorieController::class, 'store']);
+    Route::put('/admin/categorie/update/{id}', [CategorieController::class, 'update']);
+    Route::delete('/admin/categorie/delete/{id}', [CategorieController::class, 'destroy']);
 });
 
 #design by softskills

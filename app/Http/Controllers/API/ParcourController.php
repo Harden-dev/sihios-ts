@@ -93,10 +93,8 @@ class ParcourController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $parcours = Parcour::query()->paginate($perPage);
-        $parcours->load('conditions');
         foreach ($parcours as $parcour) {
             $parcour->file_url = asset('storage/parcours/' . $parcour->file_path);
-         
         }
         return response()->json($parcours);
     }
@@ -138,10 +136,11 @@ class ParcourController extends Controller
      *                     description="Le fichier à télécharger (format binaire)"
      *                 ),
      *                 @OA\Property(
-     *                     property="conditions",
+     *                     property="condition_acces",
      *                     type="array",
-     *                     @OA\Items(type="integer"),
-     *                     description="Liste des IDs des conditions associées"
+     *                     @OA\Items(type="string"),
+     *                     example=["Condition 1", "Condition 2"],
+     *                     description="Liste des conditions d'accès"
      *                 )
      *             )
      *         )
@@ -149,7 +148,24 @@ class ParcourController extends Controller
      *     @OA\Response(
      *         response=201,
      *         description="Parcours créé avec succès",
-     *         @OA\JsonContent(ref="#/components/schemas/Parcour")
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer"),
+     *             @OA\Property(property="label", type="string"),
+     *             @OA\Property(property="field", type="string"),
+     *             @OA\Property(property="description", type="string"),
+     *             @OA\Property(property="file_path", type="string"),
+     *             @OA\Property(property="mime_type", type="string"),
+     *             @OA\Property(property="size", type="integer"),
+     *             @OA\Property(
+     *                 property="condition_acces",
+     *                 type="array",
+     *                 @OA\Items(type="string")
+     *             ),
+     *             @OA\Property(property="created_at", type="string", format="date-time"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time"),
+     *             @OA\Property(property="file_url", type="string")
+     *         )
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -158,8 +174,19 @@ class ParcourController extends Controller
      *             type="object",
      *             @OA\Property(
      *                 property="errors",
-     *                 type="array",
-     *                 @OA\Items(type="string")
+     *                 type="object",
+     *                 additionalProperties=true
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur serveur",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error",
+     *                 type="string"
      *             )
      *         )
      *     )
@@ -169,29 +196,24 @@ class ParcourController extends Controller
 
     public function store(Request $request)
     {
-
         try {
             $validated = $request->validate([
                 'label' => 'required|string|max:255',
                 'field' => 'required|string|max:255',
-                'conditons' => 'sometimes|array',
-                'conditions.*' => 'exists:conditions,id',
+                'condition_acces' => 'sometimes|array',
+                'condition_acces.*' => 'string',
                 'description' => 'nullable|string|max:255',
                 'file' => ['required', 'file', new AllowedFileType, 'max:20480'],
             ]);
         } catch (ValidationException $e) {
-
             return response()->json(['errors' => $e->errors()], 422);
         }
+
         try {
-
             $file = $request->file('file');
-
 
             $allowedMimeTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
             if (!in_array($file->getClientMimeType(), $allowedMimeTypes)) {
-
-
                 return response()->json(['error' => 'Le fichier doit être un PDF, un document Word ou une image'], 422);
             }
 
@@ -203,13 +225,12 @@ class ParcourController extends Controller
                 'file_path' => $path,
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
+                'condition_acces' => $request->condition_acces,
             ]);
-            $parcours->conditions()->attach($request->conditions);
-            $parcours->load('conditions');
+
             $parcours->file_url = asset('storage/parcours/' . $path);
             return response()->json($parcours, 201);
         } catch (Exception $th) {
-
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
@@ -275,12 +296,13 @@ class ParcourController extends Controller
      *                 @OA\Property(property="label", type="string", example="Titre mis à jour du parcours"),
      *                 @OA\Property(property="field", type="string", example="Domaine d'étude mis à jour"),
      *                 @OA\Property(property="description", type="string", example="Description mise à jour du parcours"),
-     *                 @OA\Property(property="file", type="string", format="binary", description="Nouveau fichier à télécharger"),
+     *                 @OA\Property(property="file", type="string", format="binary", description="Nouveau fichier à télécharger (optionnel)"),
      *                 @OA\Property(
-     *                     property="conditions",
+     *                     property="condition_acces",
      *                     type="array",
-     *                     @OA\Items(type="integer"),
-     *                     description="Liste des IDs des conditions mises à jour"
+     *                     @OA\Items(type="string"),
+     *                     description="Liste des conditions d'accès mises à jour",
+     *                     example=["Baccalauréat", "Expérience professionnelle"]
      *                 )
      *             )
      *         )
@@ -288,17 +310,60 @@ class ParcourController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Parcours mis à jour avec succès",
-     *         @OA\JsonContent(ref="#/components/schemas/Parcour")
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Mise à jour réussie"),
+     *             @OA\Property(
+     *                 property="parcours",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="label", type="string"),
+     *                 @OA\Property(property="field", type="string"),
+     *                 @OA\Property(property="description", type="string"),
+     *                 @OA\Property(property="file_path", type="string"),
+     *                 @OA\Property(property="mime_type", type="string"),
+     *                 @OA\Property(property="size", type="integer"),
+     *                 @OA\Property(
+     *                     property="condition_acces",
+     *                     type="array",
+     *                     @OA\Items(type="string")
+     *                 ),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time"),
+     *                 @OA\Property(property="file_url", type="string")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
      *         description="Parcours non trouvé",
-     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Parcours non trouvé"))
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="parcours not found")
+     *         )
      *     ),
      *     @OA\Response(
      *         response=422,
      *         description="Erreur de validation",
-     *         @OA\JsonContent(type="object", @OA\Property(property="errors", type="array", @OA\Items(type="string")))
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 additionalProperties=true
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur serveur",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error",
+     *                 type="string"
+     *             )
+     *         )
      *     )
      * )
      */
@@ -307,51 +372,48 @@ class ParcourController extends Controller
     public function update(Request $request, $id)
     {
         $parcours = Parcour::findOrFail($id);
-        if (!$parcours) {
-            return response()->json(['error' => 'parcours not found'], 404);
-        }
 
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'label' => 'required|string|max:255',
                 'field' => 'required|string|max:255',
-                'conditons' => 'sometimes|array',
-                'conditions.*' => 'exists:conditions,id',
+                'condition_acces' => 'sometimes|array',
+                'condition_acces.*' => 'string',
                 'description' => 'sometimes|string|max:255',
                 'file' => 'nullable|file|mimes:pdf,docx,jpg,jpeg,png,gif|max:10240', // 10MB max
             ]);
 
-            // Mettre à jour le titre
-            $parcours->label = $request->label;
-            $parcours->field = $request->field;
-            $parcours->description = $request->description;
+            $parcours->label = $validated['label'];
+            $parcours->field = $validated['field'];
+            $parcours->description = $validated['description'] ?? $parcours->description;
 
+            if (isset($validated['condition_acces'])) {
+                $parcours->condition_acces = $validated['condition_acces'];
+            }
 
-            // Vérifier si un fichier est uploadé
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
 
-                // Supprimer l'ancien fichier si présent
                 if ($parcours->file_path) {
                     Storage::disk('parcours')->delete($parcours->file_path);
                 }
 
-                // Stocker le nouveau fichier
                 $path = $file->store('', 'parcours');
                 $parcours->file_path = $path;
-
-                // Mettre à jour les autres informations du fichier
                 $parcours->mime_type = $file->getClientMimeType();
                 $parcours->size = $file->getSize();
             }
 
-            $parcours->conditions()->sync($request->conditions);
-            // Enregistrer les modifications
             $parcours->save();
-            $parcours->load('conditions');
-            return response()->json(['message' => 'Mise à jour réussie', 'parcours' => $parcours]);
+
+            return response()->json([
+                'message' => 'Mise à jour réussie',
+                'parcours' => $parcours
+            ]);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

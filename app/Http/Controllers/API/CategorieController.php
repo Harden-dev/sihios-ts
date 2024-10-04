@@ -10,36 +10,36 @@ use Illuminate\Http\Request;
 class CategorieController extends Controller
 {
     /**
- * @OA\Schema(
- *     schema="Categorie",
- *     type="object",
- *     title="Categorie",
- *     description="Modèle de catégorie",
- *     @OA\Property(
- *         property="id",
- *         type="integer",
- *         format="int64",
- *         description="Identifiant unique de la catégorie"
- *     ),
- *     @OA\Property(
- *         property="label",
- *         type="string",
- *         description="Label de la catégorie"
- *     ),
- *     @OA\Property(
- *         property="created_at",
- *         type="string",
- *         format="date-time",
- *         description="Date de création de la catégorie"
- *     ),
- *     @OA\Property(
- *         property="updated_at",
- *         type="string",
- *         format="date-time",
- *         description="Date de mise à jour de la catégorie"
- *     )
- * )
- */
+     * @OA\Schema(
+     *     schema="Categorie",
+     *     type="object",
+     *     title="Categorie",
+     *     description="Modèle de catégorie",
+     *     @OA\Property(
+     *         property="id",
+     *         type="integer",
+     *         format="int64",
+     *         description="Identifiant unique de la catégorie"
+     *     ),
+     *     @OA\Property(
+     *         property="label",
+     *         type="string",
+     *         description="Label de la catégorie"
+     *     ),
+     *     @OA\Property(
+     *         property="created_at",
+     *         type="string",
+     *         format="date-time",
+     *         description="Date de création de la catégorie"
+     *     ),
+     *     @OA\Property(
+     *         property="updated_at",
+     *         type="string",
+     *         format="date-time",
+     *         description="Date de mise à jour de la catégorie"
+     *     )
+     * )
+     */
     //
     public function __construct()
     {
@@ -62,10 +62,11 @@ class CategorieController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Categorie::query();
-        return response()->json($categories);
+        $perPage = $request->input('per_page', 10);
+        $categorie = Categorie::query()->paginate($perPage);
+        return response()->json(['categorie' => $categorie]);
     }
     /**
      * @OA\Post(
@@ -110,5 +111,28 @@ class CategorieController extends Controller
         } catch (Exception $th) {
             return response()->json(["error" => "enregistrement échoué"]);
         }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $categorie = Categorie::findOrFail($id);
+
+        try {
+            $request->validate([
+                'label' => 'required'
+            ]);
+
+            $categorie->label = $request->label;
+            $categorie->save();
+            return response()->json(['categorie' => $categorie]);
+        } catch (Exception $th) {
+            return response()->json(["error" => "mise à jour échouée"]);
+        }
+    }
+    public function destroy($id)
+    {
+        $categorie = Categorie::findOrFail($id);
+        $categorie->delete();
+        return response()->json(['message' => 'categorie supprimée avec succès']);
     }
 }

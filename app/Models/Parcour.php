@@ -14,13 +14,15 @@ class Parcour extends Model
         'label',
         'field',
         'description',
+        'condition_acces',
         'file_path',
         'mime_type',
         'size'
     ];
 
-    public function conditions()
-    {
-        return $this->belongsToMany(Condition::class, 'condition_parcour');
-    }
+    protected $casts = [
+        'condition_acces' => 'array'
+    ];
+
+    
 }
