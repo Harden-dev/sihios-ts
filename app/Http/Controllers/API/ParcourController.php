@@ -441,7 +441,7 @@ class ParcourController extends Controller
     public function destroy($id)
     {
         $file = Parcour::findOrFail($id);
-        $file->conditions()->detach();
+        
         $filePath = $file->file_path;
         Storage::disk('parcours')->delete($filePath);
         $file->delete();
