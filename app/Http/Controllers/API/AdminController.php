@@ -60,7 +60,6 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
-        $this->middleware('admin');
     }
 
     /**
@@ -102,6 +101,7 @@ class AdminController extends Controller
             'phone' => 'required|string|max:255',
             'job_title' => 'required|string|max:255',
             'password' => 'required|string|min:8',
+            'role'=> 'required'
 
         ]);
 
@@ -113,7 +113,7 @@ class AdminController extends Controller
             'job_title' => $request->job_title,
             'password' => Hash::make($request->password),
             'status' => 'approved',
-            'is_admin' => true,
+            'role' => 'admin',
         ]);
 
         return response()->json(['message' => 'Admin created successfully', 'user' => $user], 201);
@@ -139,7 +139,7 @@ class AdminController extends Controller
      */
     public function getAllMember()
     {
-        $users = User::query()->where('is_admin', false)->get();
+        $users = User::query()->where('role', 'user')->get();
         return response()->json(['users' => $users]);
     }
 
@@ -162,7 +162,7 @@ class AdminController extends Controller
      */
     public function getAdmin()
     {
-        $users = User::query()->where('is_admin', true)->get();
+        $users = User::query()->where('role', 'admin')->get();
         return response()->json(['admins' => $users]);
     }
 
@@ -185,7 +185,7 @@ class AdminController extends Controller
      */
     public function getActiveMember()
     {
-        $users = User::withTrashed()->where('status', 'approved')->get();
+        $users = User::withTrashed()->where('status', 'approved')->where('role','user')->get();
         return response()->json(['users' => $users]);
     }
 
@@ -208,7 +208,7 @@ class AdminController extends Controller
 
     public function getPendingMember()
     {
-        $pendingMember = User::query()->where('status', 'pending')->get();
+        $pendingMember = User::query()->where('status', 'pending')->where('role', 'user')->get();
         return response()->json(['membre en attente' => $pendingMember]);
     }
 
@@ -231,7 +231,7 @@ class AdminController extends Controller
 
     public function getRejectMember()
     {
-        $rejectMember = User::query()->where('status', 'rejected')->get();
+        $rejectMember = User::query()->where('status', 'rejected')->where('role','user')->get();
         return response()->json(['membres réjétés' => $rejectMember]);
     }
 

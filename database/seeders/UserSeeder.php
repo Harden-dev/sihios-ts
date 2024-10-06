@@ -23,7 +23,18 @@ class UserSeeder extends Seeder
             'phone' => '0123456789',
             'job_title' => 'Software Engineer',
             'status' => 'approved',
-            'is_admin' => true,
+            'role' => 'super-admin',
+           ]);
+
+           DB::table('users')->insert([
+            'first_name' => 'simple',
+            'last_name' => 'Admin',
+            'email' => 'simple@admin.com',
+            'password' => Hash::make('password'),
+            'phone' => '0123456789',
+            'job_title' => 'medecin généraliste',
+            'status' => 'approved',
+            'role' => 'admin',
            ]);
     }
 }

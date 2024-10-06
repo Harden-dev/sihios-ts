@@ -227,6 +227,7 @@ class ParcourController extends Controller
             ]);
 
             $parcours->file_url = asset('storage/parcours/' . $path);
+            
             return response()->json($parcours, 201);
         } catch (Exception $th) {
             return response()->json(['error' => $th->getMessage()], 500);
@@ -267,8 +268,7 @@ class ParcourController extends Controller
     public function showParcoursDetail($id)
     {
         $parcours = Parcour::findOrFail($id);
-        $parcours->load('conditions');
-
+        $parcours->file_url = asset('storage/parcours/' . $parcours->file_path);
         return response()->json(["parcours" => $parcours], 200);
     }
 
@@ -441,7 +441,7 @@ class ParcourController extends Controller
     public function destroy($id)
     {
         $file = Parcour::findOrFail($id);
-        
+
         $filePath = $file->file_path;
         Storage::disk('parcours')->delete($filePath);
         $file->delete();

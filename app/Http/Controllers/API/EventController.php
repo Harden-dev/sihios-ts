@@ -85,7 +85,6 @@ class EventController extends Controller
         $events = Event::query()->paginate($perPage);
         foreach ($events as $event) {
             $event->file_url = asset('storage/eventFile/' . $event->file_path);
-         
         }
         return response()->json($events);
     }
@@ -157,7 +156,7 @@ class EventController extends Controller
             ]);
 
             $events->file_url = asset('storage/eventFile/' . $path);
-     
+
 
 
             return response()->json($events, 201);
@@ -196,6 +195,7 @@ class EventController extends Controller
     public function showEventDetailById($id)
     {
         $event = Event::findOrFail($id);
+        $event->file_url = asset('storage/eventFile/' . $event->file_path);
         return response()->json(['event' => $event], 200);
     }
     /**
@@ -244,74 +244,71 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->headers->set('Content-Type', 'multipart/form-data');
         $event = Event::findOrFail($id);
+        Log::info($request->all());
 
         try {
-            // Valider les champs du formulaire
-            $request->validate([
+         
+            $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'label' => 'required|string|max:255',
                 'file' => 'nullable|file|mimes:pdf,docx,jpg,jpeg,png,gif|max:10240',
             ]);
 
-            $event->title = $request->title;
-            $event->label = $request->label;
-
-            // Vérifier si un fichier est uploadé
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                // Supprimer l'ancien fichier si présent
                 if ($event->file_path) {
                     Storage::disk('event')->delete($event->file_path);
                 }
-
-                // Stocker le nouveau fichier
                 $path = $file->store('', 'event');
                 $event->file_path = $path;
                 $event->mime_type = $file->getClientMimeType();
                 $event->size = $file->getSize();
             }
 
-            // Enregistrer les modifications
             $event->save();
 
             return response()->json(['message' => 'Mise à jour réussie', 'event' => $event]);
-        } catch (Exception $th) {
-            Log::error('Erreur lors de la mise à jour : ' . $th->getMessage());
-            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.' . $th->getMessage()], 500);
+        } catch (ValidationException $e) {
+            Log::error('Erreur de validation : ' . json_encode($e->errors()));
+            return response()->json(['error' => $e->errors()], 422);
+        } catch (Exception $e) {
+            Log::error('Erreur lors de la mise à jour : ' . $e->getMessage());
+            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.'], 500);
         }
     }
 
-/**
- * @OA\Delete(
- *     path="/event/delete/{id}",
- *     tags={"Event"},
- *     summary="Supprimer un événement par ID",
- * security={{"Bearer": {}}},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="ID de l'événement à supprimer",
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Événement supprimé avec succès",
- *         @OA\JsonContent(type="object", @OA\Property(property="message", type="string"))
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Événement non trouvé",
- *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Erreur du serveur",
- *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
- *     )
- * )
- */
+    /**
+     * @OA\Delete(
+     *     path="/event/delete/{id}",
+     *     tags={"Event"},
+     *     summary="Supprimer un événement par ID",
+     * security={{"Bearer": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de l'événement à supprimer",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Événement supprimé avec succès",
+     *         @OA\JsonContent(type="object", @OA\Property(property="message", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Événement non trouvé",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur du serveur",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     )
+     * )
+     */
     public function destroy($id)
     {
         $file = Event::findOrFail($id);

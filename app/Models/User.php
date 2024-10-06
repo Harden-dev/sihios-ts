@@ -31,7 +31,7 @@ class User extends Authenticatable implements CanResetPasswordContract, JWTSubje
         'job_title',
         'status',
         'password',
-        'is_admin',
+        'role',
     ];
 
     /**
@@ -52,12 +52,22 @@ class User extends Authenticatable implements CanResetPasswordContract, JWTSubje
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'is_admin' => 'boolean',
+        // 'is_admin' => 'boolean',
     ];
 
     public function isAdmin()
     {
-        return $this->is_admin;
+        return $this->role === 'admin' ||  $this->role === 'super-admin';
+    }
+
+    public function isUser()
+    {
+        return $this->role === 'admin' ||  $this->role === 'super-admin'  || $this->role === 'user';
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->role ===  'super-admin';
     }
 
     public function sendPasswordResetNotification($token)

@@ -36,16 +36,16 @@ Route::post('/forgot-password', [ForgortPasswordController::class, 'sendResetLin
 Route::post('/reset-password', [ForgortPasswordController::class, 'resetPassword'])->name('password.reset');
 
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:api',)->group(function () {
     Route::get('/me',  [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::post('/change-password', [AuthController::class, 'changePassword']);
 
     Route::get('/librairie', [LibrairieController::class, 'index']);
-    Route::get('/librairie/{id}', [LibrairieController::class, 'showFile']);
     Route::get('/librairie/detail/{id}', [LibrairieController::class, 'showInfo']);
     Route::get('/librairie/{id}/download', [LibrairieController::class, 'download']);
+    Route::get('/librairie/detail/{id}', [LibrairieController::class, 'showInfo']);
 
     Route::get('/event', [EventController::class, 'index']);
     Route::get('/event/detail/{id}', [EventController::class, 'showEventDetailById']);
@@ -55,9 +55,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 //admin routes
-Route::middleware(['auth:api', 'admin'])->group(function () {
-
-    Route::post('/admin/store', [AdminController::class, 'store']);
+Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function () {
     Route::get('/admin/pending-member', [AdminController::class, 'getPendingMember']);
     Route::get('/admin/rejected-member', [AdminController::class, 'getRejectMember']);
     Route::post('/admin/approve-member/{id}', [AdminController::class, 'approveMember']);
@@ -65,12 +63,9 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::post('/admin/pending-member/{id}', [AdminController::class, 'pendingMemberAfterApprove']);
     Route::get('/admin/active', [AdminController::class, 'getActiveMember']);
     Route::get('/admin/all-member', [AdminController::class, 'getAllMember']);
-    Route::get('/admin/admin-list', [AdminController::class, 'getAdmin']);
+  
     Route::post('/admin/change-status/{id}/member', [AdminController::class, 'changeMemberStatus']);
-
-    Route::get('/librairie', [LibrairieController::class, 'index']);
     Route::post('/librairie', [LibrairieController::class, 'store']);
-    Route::get('/librairie/detail/{id}', [LibrairieController::class, 'showInfo']);
     Route::put('/librairie/{id}', [LibrairieController::class, 'update']);
     Route::delete('/librairie/delete/{id}', [LibrairieController::class, 'destroy']);
 
@@ -82,20 +77,24 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::post('/event', [EventController::class, 'store']);
     Route::put('/event/update/{id}', [EventController::class, 'update']);
     Route::delete('/event/delete/{id}', [EventController::class, 'destroy']);
-    Route::get('/event', [EventController::class, 'index']);
+   
 
-    Route::get('/parcours/list', [ParcourController::class, 'index']);
     Route::post('/parcours/store', [ParcourController::class, 'store']);
     Route::put('/parcours/update/{id}', [ParcourController::class, 'update']);
     Route::delete('/parcours/delete/{id}', [ParcourController::class, 'destroy']);
 
 
     Route::get('/admin/categorie',[CategorieController::class, 'index']);
+    Route::get('/admin/categorie/{id}', [CategorieController::class, 'getCategorieById']);
     Route::post('/admin/categorie', [CategorieController::class, 'store']);
     Route::put('/admin/categorie/update/{id}', [CategorieController::class, 'update']);
     Route::delete('/admin/categorie/delete/{id}', [CategorieController::class, 'destroy']);
 });
 
+Route::middleware(['auth:api', 'check.role:super-admin'])->group(function () {
+    Route::post('/admin/store', [AdminController::class, 'store']);
+    Route::get('/admin/admin-list', [AdminController::class, 'getAdmin']);
+});
 #design by softskills
 
 

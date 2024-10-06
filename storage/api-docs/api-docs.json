@@ -584,6 +584,137 @@
                 ]
             }
         },
+        "/auteur/update/{id}": {
+            "put": {
+                "tags": [
+                    "Auteurs"
+                ],
+                "summary": "Mettre à jour un auteur",
+                "description": "Met à jour le label d'un auteur existant.",
+                "operationId": "updateauteur",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'auteur à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "label"
+                                ],
+                                "properties": {
+                                    "label": {
+                                        "type": "string",
+                                        "example": "nouvel auteur"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "auteur mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "auteur": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "label": {
+                                                    "type": "string",
+                                                    "example": "Nouvel auteur"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    },
+                    "404": {
+                        "description": "auteur non trouvé"
+                    },
+                    "500": {
+                        "description": "Erreur interne"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/auteur/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Auteurs"
+                ],
+                "summary": "Supprimer un auteur",
+                "description": "Supprime un auteur en fonction de son ID.",
+                "operationId": "deleteAuteur",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l' auteur à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "auteur supprimé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "auteur supprimé avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "auteur non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur interne"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
         "/login": {
             "post": {
                 "tags": [
@@ -904,6 +1035,127 @@
                     },
                     "401": {
                         "description": "Non autorisé"
+                    }
+                }
+            }
+        },
+        "/admin/categorie/update/{id}": {
+            "put": {
+                "tags": [
+                    "Catégories"
+                ],
+                "summary": "Mettre à jour une catégorie",
+                "description": "Met à jour le label d'une catégorie existante.",
+                "operationId": "updateCategorie",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "label"
+                                ],
+                                "properties": {
+                                    "label": {
+                                        "type": "string",
+                                        "example": "Nouvelle catégorie"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Catégorie mise à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categorie": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "label": {
+                                                    "type": "string",
+                                                    "example": "Nouvelle catégorie"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur interne"
+                    }
+                }
+            }
+        },
+        "/admin/categorie/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Catégories"
+                ],
+                "summary": "Supprimer une catégorie",
+                "description": "Supprime une catégorie en fonction de son ID.",
+                "operationId": "deleteCategorie",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie supprimée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "categorie supprimée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur interne"
                     }
                 }
             }
@@ -2855,6 +3107,10 @@
         {
             "name": "Categories",
             "description": "Categories"
+        },
+        {
+            "name": "Catégories",
+            "description": "Catégories"
         },
         {
             "name": "Contact",

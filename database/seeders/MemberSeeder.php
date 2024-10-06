@@ -23,7 +23,6 @@ class MemberSeeder extends Seeder
             'phone' => '0123456789',
             'job_title' => 'Software Engineer',
             'status' => 'pending',
-            'is_admin' => false,
         ]);
         DB::table('users')->insert([
             'first_name' => 'Member2',
