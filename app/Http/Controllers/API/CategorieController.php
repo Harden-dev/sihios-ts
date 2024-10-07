@@ -69,11 +69,48 @@ class CategorieController extends Controller
         return response()->json(['categorie' => $categorie]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/admin/categorie/{id}",
+     *     summary="Récupérer une catégorie par ID",
+     *     description="Retourne les informations d'une catégorie spécifique en fonction de son ID.",
+     *     operationId="getCategorieById",
+     *     tags={"Categories"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de la catégorie à récupérer",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails de la catégorie",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="categorie", type="object", 
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="label", type="string", example="Catégorie 1"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-10-07T14:48:00.000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-10-07T14:48:00.000Z")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Catégorie non trouvée"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne"
+     *     )
+     * )
+     */
     public function getCategorieById($id)
     {
         $categorie = Categorie::query()->findOrFail($id);
         return response()->json(['categorie' => $categorie]);
     }
+
 
     /**
      * @OA\Post(
@@ -120,51 +157,51 @@ class CategorieController extends Controller
         }
     }
 
- /**
- * @OA\Put(
- *     path="/admin/categorie/update/{id}",
- *     summary="Mettre à jour une catégorie",
- *     description="Met à jour le label d'une catégorie existante.",
- *     operationId="updateCategorie",
- *     tags={"Catégories"},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="ID de la catégorie à mettre à jour",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"label"},
- *             @OA\Property(property="label", type="string", example="Nouvelle catégorie")
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Catégorie mise à jour avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="categorie", type="object", 
- *                 @OA\Property(property="id", type="integer", example=1),
- *                 @OA\Property(property="label", type="string", example="Nouvelle catégorie")
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Erreur de validation"
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Catégorie non trouvée"
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Erreur interne"
- *     )
- * )
- */
+    /**
+     * @OA\Put(
+     *     path="/admin/categorie/update/{id}",
+     *     summary="Mettre à jour une catégorie",
+     *     description="Met à jour le label d'une catégorie existante.",
+     *     operationId="updateCategorie",
+     *     tags={"Categories"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de la catégorie à mettre à jour",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"label"},
+     *             @OA\Property(property="label", type="string", example="Nouvelle catégorie")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Catégorie mise à jour avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="categorie", type="object", 
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="label", type="string", example="Nouvelle catégorie")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erreur de validation"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Catégorie non trouvée"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne"
+     *     )
+     * )
+     */
 
     public function update(Request $request, $id)
     {
@@ -184,37 +221,37 @@ class CategorieController extends Controller
     }
 
 
-/**
- * @OA\Delete(
- *     path="/admin/categorie/delete/{id}",
- *     summary="Supprimer une catégorie",
- *     description="Supprime une catégorie en fonction de son ID.",
- *     operationId="deleteCategorie",
- *     tags={"Catégories"},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="ID de la catégorie à supprimer",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Catégorie supprimée avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="categorie supprimée avec succès")
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Catégorie non trouvée"
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Erreur interne"
- *     )
- * )
- */
+    /**
+     * @OA\Delete(
+     *     path="/admin/categorie/delete/{id}",
+     *     summary="Supprimer une catégorie",
+     *     description="Supprime une catégorie en fonction de son ID.",
+     *     operationId="deleteCategorie",
+     *     tags={"Categories"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de la catégorie à supprimer",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Catégorie supprimée avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="categorie supprimée avec succès")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Catégorie non trouvée"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne"
+     *     )
+     * )
+     */
 
     public function destroy($id)
     {

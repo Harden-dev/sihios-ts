@@ -1039,10 +1039,74 @@
                 }
             }
         },
+        "/admin/categorie/{id}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Récupérer une catégorie par ID",
+                "description": "Retourne les informations d'une catégorie spécifique en fonction de son ID.",
+                "operationId": "getCategorieById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de la catégorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categorie": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "label": {
+                                                    "type": "string",
+                                                    "example": "Catégorie 1"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-10-07T14:48:00.000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-10-07T14:48:00.000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur interne"
+                    }
+                }
+            }
+        },
         "/admin/categorie/update/{id}": {
             "put": {
                 "tags": [
-                    "Catégories"
+                    "Categories"
                 ],
                 "summary": "Mettre à jour une catégorie",
                 "description": "Met à jour le label d'une catégorie existante.",
@@ -1118,7 +1182,7 @@
         "/admin/categorie/delete/{id}": {
             "delete": {
                 "tags": [
-                    "Catégories"
+                    "Categories"
                 ],
                 "summary": "Supprimer une catégorie",
                 "description": "Supprime une catégorie en fonction de son ID.",
@@ -3107,10 +3171,6 @@
         {
             "name": "Categories",
             "description": "Categories"
-        },
-        {
-            "name": "Catégories",
-            "description": "Catégories"
         },
         {
             "name": "Contact",
