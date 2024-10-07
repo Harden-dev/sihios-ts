@@ -58,6 +58,56 @@ class AuteurController extends Controller
         return response()->json(['Auteurs' => $auteurs]);
     }
 
+
+
+    /**
+     * @OA\Get(
+     *     path="/auteur/{id}",
+     *     summary="Récupérer un auteur par ID",
+     *     description="Retourne les informations d'un auteur spécifique en fonction de son ID.",
+     *     operationId="getAuteurById",
+     *     tags={"Auteurs"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l'auteur à récupérer",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails de l'auteur",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="auteur", type="object", 
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="auteur 1"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-10-07T14:48:00.000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-10-07T14:48:00.000Z")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="auteur non trouvé"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne"
+     *     )
+     * )
+     */
+
+
+    public function getAuteurById($id)
+    {
+        $auteurs = Auteur::query()->findOrFail($id);
+        return response()->json(["auteur" => $auteurs]);
+    }
+
+
+
+
+
     /**
      * @OA\Post(
      *     path="/auteur",
@@ -88,6 +138,9 @@ class AuteurController extends Controller
      * )
      */
 
+
+
+
     public function store(Request $request)
     {
         $request->validate(
@@ -117,52 +170,52 @@ class AuteurController extends Controller
         }
     }
 
-        /**
- * @OA\Put(
- *     path="/auteur/update/{id}",
- *     summary="Mettre à jour un auteur",
- *     description="Met à jour le label d'un auteur existant.",
- *     operationId="updateauteur",
- * security={{"Bearer": {}}},
- *     tags={"Auteurs"},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="ID de l'auteur à mettre à jour",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"label"},
- *             @OA\Property(property="label", type="string", example="nouvel auteur")
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="auteur mis à jour avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="auteur", type="object", 
- *                 @OA\Property(property="id", type="integer", example=1),
- *                 @OA\Property(property="label", type="string", example="Nouvel auteur")
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Erreur de validation"
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="auteur non trouvé"
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Erreur interne"
- *     )
- * )
- */
+    /**
+     * @OA\Put(
+     *     path="/auteur/update/{id}",
+     *     summary="Mettre à jour un auteur",
+     *     description="Met à jour le label d'un auteur existant.",
+     *     operationId="updateauteur",
+     * security={{"Bearer": {}}},
+     *     tags={"Auteurs"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l'auteur à mettre à jour",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"label"},
+     *             @OA\Property(property="label", type="string", example="nouvel auteur")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="auteur mis à jour avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="auteur", type="object", 
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="label", type="string", example="Nouvel auteur")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erreur de validation"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="auteur non trouvé"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne"
+     *     )
+     * )
+     */
 
     public function update(Request  $request, $id)
     {
@@ -176,7 +229,7 @@ class AuteurController extends Controller
         try {
             $auteurs->name = $request->name;
             $auteurs->save();
-            return response()->json(["success" => "auteur modifié avec succès", "auteurs"=>$auteurs], 200);
+            return response()->json(["success" => "auteur modifié avec succès", "auteurs" => $auteurs], 200);
         } catch (\Exception $th) {
             return response()->json(["error" => "la modification a échoué, veuillez réessayer"]);
         }
@@ -184,37 +237,37 @@ class AuteurController extends Controller
 
 
     /**
- * @OA\Delete(
- *     path="/auteur/delete/{id}",
- *     summary="Supprimer un auteur",
- *     description="Supprime un auteur en fonction de son ID.",
- *     operationId="deleteAuteur",
- * security={{"Bearer": {}}},
- *     tags={"Auteurs"},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="ID de l' auteur à supprimer",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="auteur supprimé avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="auteur supprimé avec succès")
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="auteur non trouvée"
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Erreur interne"
- *     )
- * )
- */
+     * @OA\Delete(
+     *     path="/auteur/delete/{id}",
+     *     summary="Supprimer un auteur",
+     *     description="Supprime un auteur en fonction de son ID.",
+     *     operationId="deleteAuteur",
+     * security={{"Bearer": {}}},
+     *     tags={"Auteurs"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l' auteur à supprimer",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="auteur supprimé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="auteur supprimé avec succès")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="auteur non trouvée"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne"
+     *     )
+     * )
+     */
     public function destroy($id)
     {
         $auteurs = Auteur::findOrFail($id);

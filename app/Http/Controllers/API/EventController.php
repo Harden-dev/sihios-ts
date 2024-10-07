@@ -244,12 +244,16 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->headers->set('Content-Type', 'multipart/form-data');
+
         $event = Event::findOrFail($id);
-        Log::info($request->all());
+
+        if (!$event) {
+            return response()->json(["error" => "evenement non trouvé"]);
+        }
+
 
         try {
-         
+
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'label' => 'required|string|max:255',
@@ -270,12 +274,12 @@ class EventController extends Controller
             $event->save();
 
             return response()->json(['message' => 'Mise à jour réussie', 'event' => $event]);
-        } catch (ValidationException $e) {
-            Log::error('Erreur de validation : ' . json_encode($e->errors()));
-            return response()->json(['error' => $e->errors()], 422);
+            // } catch (ValidationException $e) {
+            //     Log::error('Erreur de validation : ' . json_encode($e->errors()));
+            //     return response()->json(['error' => $e->errors()], 422);
         } catch (Exception $e) {
             Log::error('Erreur lors de la mise à jour : ' . $e->getMessage());
-            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.'], 500);
+            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.' .$e->getMessage()], 500);
         }
     }
 

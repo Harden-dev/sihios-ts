@@ -70,6 +70,7 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
     Route::delete('/librairie/delete/{id}', [LibrairieController::class, 'destroy']);
 
     Route::get('/auteur', [AuteurController::class, 'index']);
+    Route::get('/auteur/{id}', [AuteurController::class, 'getAuteurById']);
     Route::post('/auteur', [AuteurController::class, 'store']);
     Route::put('/auteur/update/{id}', [AuteurController::class, 'update']);
     Route::delete('/auteur/delete/{id}', [AuteurController::class, 'destroy']);
@@ -78,7 +79,6 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
     Route::put('/event/update/{id}', [EventController::class, 'update']);
     Route::delete('/event/delete/{id}', [EventController::class, 'destroy']);
    
-
     Route::post('/parcours/store', [ParcourController::class, 'store']);
     Route::put('/parcours/update/{id}', [ParcourController::class, 'update']);
     Route::delete('/parcours/delete/{id}', [ParcourController::class, 'destroy']);
@@ -95,7 +95,6 @@ Route::middleware(['auth:api', 'check.role:super-admin'])->group(function () {
     Route::post('/admin/store', [AdminController::class, 'store']);
     Route::get('/admin/admin-list', [AdminController::class, 'getAdmin']);
 });
-#design by softskills
 
 
 //contact routes

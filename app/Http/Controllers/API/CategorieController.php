@@ -40,7 +40,8 @@ class CategorieController extends Controller
      *     )
      * )
      */
-    //
+    
+     
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -257,6 +258,6 @@ class CategorieController extends Controller
     {
         $categorie = Categorie::findOrFail($id);
         $categorie->delete();
-        return response()->json(['message' => 'categorie supprimée avec succès']);
+        return response()->json(['message' => 'catégorie supprimée avec succès']);
     }
 }
