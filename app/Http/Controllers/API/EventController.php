@@ -269,15 +269,18 @@ class EventController extends Controller
              
             }
 
+            $event->title = $request->title;
+            $event->label = $request->label;
+
             $event->save();
 
             return response()->json(['message' => 'Mise à jour réussie', 'event' => $event]);
-            // } catch (ValidationException $e) {
-            //     Log::error('Erreur de validation : ' . json_encode($e->errors()));
-            //     return response()->json(['error' => $e->errors()], 422);
+            } catch (ValidationException $e) {
+                Log::error('Erreur de validation : ' . json_encode($e->errors()));
+                return response()->json(['error' => $e->errors()], 422);
         } catch (Exception $e) {
             Log::error('Erreur lors de la mise à jour : ' . $e->getMessage());
-            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.'], 500);
         }
     }
 

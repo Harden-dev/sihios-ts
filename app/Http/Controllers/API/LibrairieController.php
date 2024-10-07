@@ -252,6 +252,9 @@ class LibrairieController extends Controller
     public function showInfo($id)
     {
         $librairie = Librairie::findOrFail($id);
+        if(!$librairie){
+            return response()->json(["error"=>"librairie non trouvé"]);
+        }
         $librairie->load('auteurs');
 
         return response()->json(['librairie' => $librairie,], 200);
