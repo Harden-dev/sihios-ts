@@ -151,8 +151,7 @@ class EventController extends Controller
                 'title' => $request->title,
                 'label' => $request->label,
                 'file_path' => $path,
-                'mime_type' => $file->getClientMimeType(),
-                'size' => $file->getSize(),
+              
             ]);
 
             $events->file_url = asset('storage/eventFile/' . $path);
@@ -267,8 +266,7 @@ class EventController extends Controller
                 }
                 $path = $file->store('', 'event');
                 $event->file_path = $path;
-                $event->mime_type = $file->getClientMimeType();
-                $event->size = $file->getSize();
+             
             }
 
             $event->save();
@@ -279,7 +277,7 @@ class EventController extends Controller
             //     return response()->json(['error' => $e->errors()], 422);
         } catch (Exception $e) {
             Log::error('Erreur lors de la mise à jour : ' . $e->getMessage());
-            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.' .$e->getMessage()], 500);
+            return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.' . $e->getMessage()], 500);
         }
     }
 

@@ -63,7 +63,7 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
     Route::post('/admin/pending-member/{id}', [AdminController::class, 'pendingMemberAfterApprove']);
     Route::get('/admin/active', [AdminController::class, 'getActiveMember']);
     Route::get('/admin/all-member', [AdminController::class, 'getAllMember']);
-  
+
     Route::post('/admin/change-status/{id}/member', [AdminController::class, 'changeMemberStatus']);
     Route::post('/librairie', [LibrairieController::class, 'store']);
     Route::put('/librairie/{id}', [LibrairieController::class, 'update']);
@@ -78,13 +78,13 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
     Route::post('/event', [EventController::class, 'store']);
     Route::put('/event/update/{id}', [EventController::class, 'update']);
     Route::delete('/event/delete/{id}', [EventController::class, 'destroy']);
-   
+
     Route::post('/parcours/store', [ParcourController::class, 'store']);
     Route::put('/parcours/update/{id}', [ParcourController::class, 'update']);
     Route::delete('/parcours/delete/{id}', [ParcourController::class, 'destroy']);
 
 
-    Route::get('/admin/categorie',[CategorieController::class, 'index']);
+    Route::get('/admin/categorie', [CategorieController::class, 'index']);
     Route::get('/admin/categorie/{id}', [CategorieController::class, 'getCategorieById']);
     Route::post('/admin/categorie', [CategorieController::class, 'store']);
     Route::put('/admin/categorie/update/{id}', [CategorieController::class, 'update']);
