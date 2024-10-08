@@ -139,7 +139,7 @@ class AdminController extends Controller
      */
     public function getAllMember()
     {
-        $users = User::query()->where('role', 'user')->get();
+        $users = User::withTrashed()->where('role', 'user')->get();
         return response()->json(['users' => $users]);
     }
 
@@ -162,7 +162,7 @@ class AdminController extends Controller
      */
     public function getAdmin()
     {
-        $users = User::query()->where('role', 'admin')->get();
+        $users = User::withTrashed()->where('role', 'admin')->get();
         return response()->json(['admins' => $users]);
     }
 
@@ -208,7 +208,7 @@ class AdminController extends Controller
 
     public function getPendingMember()
     {
-        $pendingMember = User::query()->where('status', 'pending')->where('role', 'user')->get();
+        $pendingMember = User::withTrashed()->where('status', 'pending')->where('role', 'user')->get();
         return response()->json(['membre en attente' => $pendingMember]);
     }
 

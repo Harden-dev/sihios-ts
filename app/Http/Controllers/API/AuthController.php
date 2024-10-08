@@ -185,9 +185,15 @@ class AuthController extends Controller
             return response()->json(['error' => 'Utilisateur non trouvé'], 404);
         }
 
+        if(!$user->status = 'pending')
+        {
+            Auth::guard('api')->logout();
+            return response()->json(['error' => 'Votre compte  est en cours en d\'approbation, contacter l\'administrateur'], 403);
+        }
+
         if ($user->deleted_at) {
             Auth::guard('api')->logout();
-            return response()->json(['error' => 'Votre est désactivé, contacter votre administrateur'], 403);
+            return response()->json(['error' => 'Votre compte  est désactivé, contacter votre administrateur'], 403);
         }
 
         return $this->respondWithToken($token);
