@@ -33,7 +33,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forgot-password', [ForgortPasswordController::class, 'sendResetLinkEmail']);
-Route::post('/reset-password', [ForgortPasswordController::class, 'resetPassword'])->name('password.reset');
+Route::post('/reset-password', [ForgortPasswordController::class, 'resetPassword']);
+Route::post('/reset/password/mail', [AuthController::class, 'ResetPasswordMail']);
 
 
 Route::middleware('auth:api',)->group(function () {
@@ -92,7 +93,7 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
 });
 
 Route::middleware(['auth:api', 'check.role:super-admin'])->group(function () {
-    Route::post('/admin/store', [AdminController::class, 'store']);
+    Route::post('/admin/store', [AdminController::class, 'StoreAdmin']);
     Route::get('/admin/admin-list', [AdminController::class, 'getAdmin']);
 });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ResetMail;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Mail;
 
 /**
  * @OA\SecurityScheme(
@@ -69,7 +72,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'ResetPasswordMail']]);
     }
 
     /**
@@ -185,8 +188,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Utilisateur non trouvé'], 404);
         }
 
-        if(!$user->status = 'pending')
-        {
+        if ($user->status == 'pending') {
             Auth::guard('api')->logout();
             return response()->json(['error' => 'Votre compte  est en cours en d\'approbation, contacter l\'administrateur'], 403);
         }
@@ -199,7 +201,6 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    
 
     /**
      * Get the authenticated User.
@@ -236,7 +237,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-     
+
     /**
      * @OA\Post(
      *     path="/logout",
@@ -256,14 +257,14 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-   
+
 
     /**
      * Refresh a token.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-     /**
+    /**
      * @OA\Post(
      *     path="/refresh",
      *     tags={"Auth"},
@@ -354,6 +355,88 @@ class AuthController extends Controller
         } catch (Exception $e) {
             Log::error('Erreur lors de la modification du mot de passe : ' . $e->getMessage());
             return response()->json(['error' => 'Une erreur est survenue lors de la modification du mot de passe'], 500);
+        }
+    }
+
+
+    /**
+     * @OA\Post(
+     *     path="/reset/password/mail",
+     *     summary="Réinitialiser le mot de passe de l'utilisateur",
+     *     description="Cette fonction permet de réinitialiser le mot de passe d'un utilisateur et d'envoyer un nouveau mot de passe par email.",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email"},
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Mot de passe réinitialisé et envoyé par email",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Un nouveau mot de passe a été envoyé à votre adresse e-mail")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Utilisateur non trouvé",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="L'utilisateur n'existe pas")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur serveur",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Une erreur est survenue lors de la réinitialisation du mot de passe")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erreur de validation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Le champ email est obligatoire.")
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="email",
+     *         in="query",
+     *         description="Adresse e-mail de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="string", format="email")
+     *     ),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+
+
+    public function ResetPasswordMail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        try {
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+
+                return response()->json(['error' => 'L\'utilisateur n\'existe pas'], 401);
+            }
+
+            $newPassword = Str::random(8);
+
+            $user->password = Hash::make($newPassword);
+            $user->save();
+
+            Mail::to($user->email)->send(new ResetMail($user, $newPassword));
+
+            return response()->json(['message' => 'Un nouveau mot de passe a été envoyé à votre adresse e-mail'], 201);
+        } catch (\Exception $th) {
+
+            Log::error('Une erreur est survenue lors de la réinitialisation du mot de passe : ' . $th->getMessage());
+            return response()->json(['error' => "Une erreur est survenue lors de la réinitialisation du mot de passe"], 500);
         }
     }
 }

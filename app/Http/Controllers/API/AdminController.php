@@ -3,9 +3,17 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ApproveMail;
+use App\Mail\NewAdminCredentials;
+use App\Mail\RejectedMail;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use Log;
 
 class AdminController extends Controller
 {
@@ -92,7 +100,7 @@ class AdminController extends Controller
      * )
      */
 
-    public function StoreAdmin(Request $request)
+    public function storeAdmin(Request $request)
     {
         $request->validate([
             'first_name' => 'required|string|max:255',
@@ -100,24 +108,47 @@ class AdminController extends Controller
             'email' => 'required|email|unique:users',
             'phone' => 'required|string|max:255',
             'job_title' => 'required|string|max:255',
-            'password' => 'required|string|min:8',
-            'role'=> 'required'
-
         ]);
 
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'job_title' => $request->job_title,
-            'password' => Hash::make($request->password),
-            'status' => 'approved',
-            'role' => 'admin',
-        ]);
+        try {
+            $password = Str::random(8);
 
-        return response()->json(['message' => 'Admin created successfully', 'user' => $user], 201);
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'job_title' => $request->job_title,
+                'password' => Hash::make($password),
+                'status' => 'approved',
+                'role' => 'admin',
+            ]);
+
+            Mail::to($user->email)->send(new NewAdminCredentials($user, $password));
+
+            return response()->json([
+                'message' => 'Admin créé avec succès. Un e-mail avec les identifiants a été envoyé.',
+                'user' => [
+                    'id' => $user->id,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'job_title' => $user->job_title,
+                    'role' => $user->role->value,
+                    'status' => $user->status->value,
+                ],
+            ], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (Exception $th) {
+
+            return response()->json([
+                'message' => 'Une erreur s\'est produite.' . $th->getMessage(),
+            ], 500);
+        }
     }
+
 
 
 
@@ -185,7 +216,7 @@ class AdminController extends Controller
      */
     public function getActiveMember()
     {
-        $users = User::withTrashed()->where('status', 'approved')->where('role','user')->get();
+        $users = User::withTrashed()->where('status', 'approved')->where('role', 'user')->get();
         return response()->json(['users' => $users]);
     }
 
@@ -231,7 +262,7 @@ class AdminController extends Controller
 
     public function getRejectMember()
     {
-        $rejectMember = User::query()->where('status', 'rejected')->where('role','user')->get();
+        $rejectMember = User::query()->where('status', 'rejected')->where('role', 'user')->get();
         return response()->json(['membres réjétés' => $rejectMember]);
     }
 
@@ -264,9 +295,14 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
 
+        if(!$user){
+            return response()->json(['error' => 'Membre non trouvé'], 404);
+        }
 
         $user->status = 'approved';
         $user->save();
+
+        Mail::to($user->email)->send(new ApproveMail($user));
         return response()->json(['message' => 'Membre approuvé avec succès']);
     }
 
@@ -298,8 +334,15 @@ class AdminController extends Controller
     public function rejectMember($id)
     {
         $user = User::findOrFail($id);
+
+        if(!$user){
+            return response()->json(['error' => 'Membre non trouvé'], 404);
+        }
+
         $user->status = 'rejected';
         $user->save();
+
+        Mail::to($user->email)->send(new RejectedMail($user));
         return response()->json(['message' => 'Membre rejeté avec succès']);
     }
 
