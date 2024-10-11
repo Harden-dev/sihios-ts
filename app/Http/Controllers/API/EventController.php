@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Rules\AllowedFileType;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Log;
@@ -147,6 +148,7 @@ class EventController extends Controller
             }
 
             $path = $file->store('', 'event');
+            File::chmod(storage_path("app/". $path), 0644);
             $events = Event::create([
                 'title' => $request->title,
                 'label' => $request->label,
