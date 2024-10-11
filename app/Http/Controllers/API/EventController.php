@@ -148,7 +148,7 @@ class EventController extends Controller
             }
 
             $path = $file->store('', 'event');
-            File::chmod(storage_path("app/". $path), 0644);
+            File::chmod(storage_path("app/public/eventFile". $path), 0644);
             $events = Event::create([
                 'title' => $request->title,
                 'label' => $request->label,
