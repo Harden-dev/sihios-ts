@@ -267,6 +267,7 @@ class EventController extends Controller
                     Storage::disk('event')->delete($event->file_path);
                 }
                 $path = $file->store('', 'event');
+                File::chmod(storage_path("app/public/eventFile/". $path), 0644);
                 $event->file_path = $path;
              
             }

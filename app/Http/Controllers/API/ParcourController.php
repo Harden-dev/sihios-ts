@@ -7,6 +7,7 @@ use App\Models\Parcour;
 use App\Rules\AllowedFileType;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -395,6 +396,7 @@ class ParcourController extends Controller
                 }
 
                 $path = $file->store('', 'parcours');
+                File::chmod(storage_path("app/public/parcours/". $path), 0644);
                 $parcours->file_path = $path;
                 $parcours->mime_type = $file->getClientMimeType();
                 $parcours->size = $file->getSize();
