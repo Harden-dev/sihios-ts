@@ -85,7 +85,7 @@ class EventController extends Controller
 
         $events = Event::query()->paginate($perPage);
         foreach ($events as $event) {
-            $event->file_url = asset('storage/librairie/' . $event->file_path);
+            $event->file_url = asset('storage/eventFile/' . $event->file_path);
         }
         return response()->json($events);
     }
@@ -147,8 +147,8 @@ class EventController extends Controller
                 return response()->json(['error' => 'Le fichier doit être un PDF, un document Word ou une image'], 422);
             }
 
-            $path = $file->store('', 'librairie');
-          
+            $path = $file->store('', 'event');
+           File::chmod(storage_path("app/public/eventFile/". $path), 0644);
             $events = Event::create([
                 'title' => $request->title,
                 'label' => $request->label,
@@ -156,7 +156,7 @@ class EventController extends Controller
               
             ]);
 
-            $events->file_url = asset('storage/librairie/' . $path);
+            $events->file_url = asset('storage/eventFile/' . $path);
 
 
 
