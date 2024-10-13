@@ -191,9 +191,15 @@ class AdminController extends Controller
      *     )
      * )
      */
-    public function getAdmin()
+    public function getAdmin(Request $request)
     {
-        $users = User::withTrashed()->where('role', 'admin')->get();
+        $perPage = $request->input('per_page', 10);
+
+        $users = User::withTrashed()
+            ->where('role', 'admin')
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
+
         return response()->json(['admins' => $users]);
     }
 
@@ -214,9 +220,15 @@ class AdminController extends Controller
      *     )
      * )
      */
-    public function getActiveMember()
+    public function getActiveMember(Request $request)
     {
-        $users = User::withTrashed()->where('status', 'approved')->where('role', 'user')->get();
+        $perPage = $request->input('per_page', 10);
+
+        $users = User::withTrashed()
+            ->where('status', 'approved')
+            ->where('role', 'user')
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
         return response()->json(['users' => $users]);
     }
 
@@ -419,7 +431,7 @@ class AdminController extends Controller
      *         )
      *     )
      * )
-     */ 
+     */
 
     public function changeMemberStatus($id)
     {
