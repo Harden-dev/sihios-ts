@@ -108,7 +108,7 @@ class AdminController extends Controller
             'email' => 'required|email|unique:users',
             'phone' => 'required|string|max:255',
             'job_title' => 'required|string|max:255',
-        ]);
+        ], $this->messageValidation());
 
         try {
             $password = Str::random(8);
@@ -444,5 +444,39 @@ class AdminController extends Controller
             $user->delete();
             return response()->json(['message' => "Désactivation réussie"]);
         }
+    }
+
+    protected function messageValidation()
+    {
+        return [
+
+            'first_name.required' => 'Le prénom est obligatoire.',
+            'first_name.string' => 'Le prénom doit être une chaîne de caractères.',
+            'first_name.max' => 'Le prénom ne doit pas dépasser 255 caractères.',
+
+            'last_name.required' => 'Le nom de famille est obligatoire.',
+            'last_name.string' => 'Le nom de famille doit être une chaîne de caractères.',
+            'last_name.max' => 'Le nom de famille ne doit pas dépasser 255 caractères.',
+
+            'email.required' => 'L\'adresse e-mail est obligatoire.',
+            'email.string' => 'L\'adresse e-mail doit être une chaîne de caractères.',
+            'email.email' => 'L\'adresse e-mail doit être une adresse e-mail valide.',
+            'email.max' => 'L\'adresse e-mail ne doit pas dépasser 255 caractères.',
+            'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
+
+            'phone.required' => 'Le numéro de téléphone est obligatoire.',
+            'phone.string' => 'Le numéro de téléphone doit être une chaîne de caractères.',
+            'phone.max' => 'Le numéro de téléphone ne doit pas dépasser 255 caractères.',
+
+            'job_title.required' => 'Le titre du poste est obligatoire.',
+            'job_title.string' => 'Le titre du poste doit être une chaîne de caractères.',
+            'job_title.max' => 'Le titre du poste ne doit pas dépasser 255 caractères.',
+
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.string' => 'Le mot de passe doit être une chaîne de caractères.',
+            'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
+            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+
+        ];
     }
 }

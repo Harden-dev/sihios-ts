@@ -91,8 +91,7 @@ class AuthController extends Controller
             'job_title' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
 
-
-        ]);
+        ], $this->messageValidation());
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -159,7 +158,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:6',
         ]);
 
         if ($validator->fails()) {
@@ -434,4 +433,38 @@ class AuthController extends Controller
             return response()->json(['error' => "Une erreur est survenue lors de la réinitialisation du mot de passe"], 500);
         }
     }
-}
+
+
+    protected function messageValidation()
+    {
+        return [
+
+            'first_name.required' => 'Le prénom est obligatoire.',
+            'first_name.string' => 'Le prénom doit être une chaîne de caractères.',
+            'first_name.max' => 'Le prénom ne doit pas dépasser 255 caractères.',
+
+            'last_name.required' => 'Le nom de famille est obligatoire.',
+            'last_name.string' => 'Le nom de famille doit être une chaîne de caractères.',
+            'last_name.max' => 'Le nom de famille ne doit pas dépasser 255 caractères.',
+
+            'email.required' => 'L\'adresse e-mail est obligatoire.',
+            'email.string' => 'L\'adresse e-mail doit être une chaîne de caractères.',
+            'email.email' => 'L\'adresse e-mail doit être une adresse e-mail valide.',
+            'email.max' => 'L\'adresse e-mail ne doit pas dépasser 255 caractères.',
+            'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
+
+            'phone.required' => 'Le numéro de téléphone est obligatoire.',
+            'phone.string' => 'Le numéro de téléphone doit être une chaîne de caractères.',
+            'phone.max' => 'Le numéro de téléphone ne doit pas dépasser 255 caractères.',
+
+            'job_title.required' => 'Le titre du poste est obligatoire.',
+            'job_title.string' => 'Le titre du poste doit être une chaîne de caractères.',
+            'job_title.max' => 'Le titre du poste ne doit pas dépasser 255 caractères.',
+
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.string' => 'Le mot de passe doit être une chaîne de caractères.',
+            'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
+            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+
+        ];
+    }}
