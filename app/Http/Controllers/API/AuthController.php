@@ -183,11 +183,6 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $user = Auth::guard('api')->user();
-        if (!$user) {
-            return response()->json(['error' => 'Utilisateur non trouvé'], 404);
-        }
-
         if ($user->status == 'pending') {
             Auth::guard('api')->logout();
             return response()->json(['error' => 'Votre compte  est en cours en d\'approbation, contacter l\'administrateur'], 403);

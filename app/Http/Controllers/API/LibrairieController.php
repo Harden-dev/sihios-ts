@@ -95,7 +95,7 @@ class LibrairieController extends Controller
         $perPage = $request->input('per_page', 10);
 
 
-        $librairies = Librairie::query()->paginate($perPage);
+        $librairies = Librairie::query()->OrderByDesc('created_at')->paginate($perPage);
         $librairies->load('auteurs');
 
         foreach ($librairies as $librairie) {
@@ -349,11 +349,11 @@ class LibrairieController extends Controller
          // Validation des données entrantes
          $validator = $request->validate([
              'title' => 'sometimes|string|max:255',
-             'categorie_id' => 'sometimes|integer|exists:categories,id',
-             'auteurs' => 'sometimes|array',
-             'auteurs.*' => 'exists:auteurs,id',
-             'file' => ['nullable', 'file', new AllowedFileType],
-             'file_img' => ['nullable', 'image', 'max:20480'],
+            'categorie_id' => 'sometimes|integer|exists:categories,id',
+            // 'auteurs' => 'sometimes|array',
+            // 'auteurs.*' => 'exists:auteurs,id',
+            // 'file' => ['nullable', 'file', new AllowedFileType],
+            // 'file_img' => ['nullable', 'image', 'max:20480'],
          ]);
 
          try {

@@ -135,8 +135,8 @@ class AdminController extends Controller
                     'email' => $user->email,
                     'phone' => $user->phone,
                     'job_title' => $user->job_title,
-                    'role' => $user->role->value,
-                    'status' => $user->status->value,
+                    'role' => $user->role,
+                    'status' => $user->status,
                 ],
             ], 201);
         } catch (ValidationException $e) {
@@ -295,7 +295,7 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if(!$user){
+        if (!$user) {
             return response()->json(['error' => 'Membre non trouvé'], 404);
         }
 
@@ -335,7 +335,7 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if(!$user){
+        if (!$user) {
             return response()->json(['error' => 'Membre non trouvé'], 404);
         }
 
@@ -419,7 +419,7 @@ class AdminController extends Controller
      *         )
      *     )
      * )
-     */
+     */ 
 
     public function changeMemberStatus($id)
     {

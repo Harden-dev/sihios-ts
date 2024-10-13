@@ -93,7 +93,7 @@ class ParcourController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $parcours = Parcour::query()->paginate($perPage);
+        $parcours = Parcour::query()->OrderByDesc('created_at')->paginate($perPage);
         foreach ($parcours as $parcour) {
             $parcour->file_url = asset('storage/parcours/' . $parcour->file_path);
         }
@@ -217,6 +217,7 @@ class ParcourController extends Controller
             }
 
             $path = $file->store('', 'parcours');
+            File::chmod(storage_path("app/public/parcours/". $path), 0644);
             $parcours = Parcour::create([
                 'label' => $request->label,
                 'field' => $request->field,
@@ -377,7 +378,7 @@ class ParcourController extends Controller
                 'condition_acces' => 'sometimes|array',
                 'condition_acces.*' => 'string',
                 'description' => 'sometimes|string|max:255',
-                'file' => 'nullable|file|mimes:pdf,docx,jpg,jpeg,png,gif|max:10240', // 10MB max
+               // 'file' => 'nullable|file|mimes:pdf,docx,jpg,jpeg,png,gif|max:10240', // 10MB max
             ]);
 
             $parcours->label = $validated['label'];

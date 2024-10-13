@@ -83,10 +83,12 @@ class EventController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $events = Event::query()->paginate($perPage);
-        foreach ($events as $event) {
-            $event->file_url = asset('storage/eventFile/' . $event->file_path);
-        }
+        $events = Event::query()->OrderByDesc('created_at')->paginate($perPage);
+
+        $events->getCollection()->transform(function ($event) {
+            $event->file_url = Storage::url('eventFile/' . $event->file_path);
+            return $event;
+        });
         return response()->json($events);
     }
 
@@ -148,12 +150,12 @@ class EventController extends Controller
             }
 
             $path = $file->store('', 'event');
-           File::chmod(storage_path("app/public/eventFile/". $path), 0644);
+            File::chmod(storage_path("app/public/eventFile/" . $path), 0644);
             $events = Event::create([
                 'title' => $request->title,
                 'label' => $request->label,
                 'file_path' => $path,
-              
+
             ]);
 
             $events->file_url = asset('storage/eventFile/' . $path);
@@ -249,7 +251,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
 
         if (!$event) {
-            return response()->json(["error" => "evenement non trouvé"]);
+            return response()->json(["error" => "évènement non trouvé"]);
         }
 
 
@@ -258,7 +260,7 @@ class EventController extends Controller
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'label' => 'required|string|max:255',
-                'file' => 'nullable|file|mimes:pdf,docx,jpg,jpeg,png,gif|max:10240',
+                // 'file' => 'nullable|file|mimes:pdf,docx,jpg,jpeg,png,gif|max:10240',
             ]);
 
             if ($request->hasFile('file')) {
@@ -267,9 +269,8 @@ class EventController extends Controller
                     Storage::disk('event')->delete($event->file_path);
                 }
                 $path = $file->store('', 'event');
-                File::chmod(storage_path("app/public/eventFile/". $path), 0644);
+                File::chmod(storage_path("app/public/eventFile/" . $path), 0644);
                 $event->file_path = $path;
-             
             }
 
             $event->title = $request->title;
@@ -278,9 +279,9 @@ class EventController extends Controller
             $event->save();
 
             return response()->json(['message' => 'Mise à jour réussie', 'event' => $event]);
-            } catch (ValidationException $e) {
-                Log::error('Erreur de validation : ' . json_encode($e->errors()));
-                return response()->json(['error' => $e->errors()], 422);
+        } catch (ValidationException $e) {
+            Log::error('Erreur de validation : ' . json_encode($e->errors()));
+            return response()->json(['error' => $e->errors()], 422);
         } catch (Exception $e) {
             Log::error('Erreur lors de la mise à jour : ' . $e->getMessage());
             return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour.'], 500);
