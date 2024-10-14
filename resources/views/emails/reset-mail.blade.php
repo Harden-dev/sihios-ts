@@ -40,7 +40,7 @@
         <a href="mailto:sihiotsinfo@gmail.com">Cliquer ici</a>
     </p>
 
-    <p>Merci de votre confiance.
+    <p>Merci de votre confiance.<br>
 
         Cordialement,
     </p>

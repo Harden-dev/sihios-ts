@@ -36,7 +36,7 @@
 
     <p>Nous vous remercions pour votre confiance et restons à votre disposition pour toute question complémentaire.</p>
 
-    <p>Cordialement,
+    <p>Cordialement,<br>
        SIHIOTS - <a href="mailto:sihiotsinfo@gmail.com">Contacter via mail</a>.</p>
 
     <hr>

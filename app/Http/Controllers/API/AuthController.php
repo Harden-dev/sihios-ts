@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegisterExamination;
 use App\Mail\ResetMail;
 use App\Models\User;
 use Exception;
@@ -94,7 +95,7 @@ class AuthController extends Controller
         ], $this->messageValidation());
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json($validator->errors(), 422);
         }
 
         $user = User::create([
@@ -107,6 +108,8 @@ class AuthController extends Controller
             'status' => 'pending',
 
         ]);
+
+        Mail::to($user->email)->send(new RegisterExamination($user));
 
         return response()->json([
             'message' => 'User created successfully',
@@ -331,8 +334,8 @@ class AuthController extends Controller
     public function changePassword(Request $request)
     {
         $request->validate([
-            'current_password' => 'required|string|min:8',
-            'new_password' => 'required|string|min:8|confirmed',
+            'current_password' => 'required|string|min:6',
+            'new_password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = Auth::guard('api')->user();
@@ -416,7 +419,12 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->first();
             if (!$user) {
 
-                return response()->json(['error' => 'L\'utilisateur n\'existe pas'], 401);
+                return response()->json(['error' => 'L\'utilisateur n\'existe pas'], 404);
+            }
+
+            if($user->deleted_at){
+
+                return response()->json(['error' => 'L\'utilisateur est désactivé'], 403);
             }
 
             $newPassword = Str::random(8);
@@ -464,7 +472,8 @@ class AuthController extends Controller
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.string' => 'Le mot de passe doit être une chaîne de caractères.',
             'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
-            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',  
 
         ];
     }}
+ 

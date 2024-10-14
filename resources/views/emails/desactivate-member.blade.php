@@ -34,11 +34,12 @@
         vous ne pourrez plus accéder à votre espace membre ni bénéficier des services et fonctionnalités réservés aux
         membres.</p>
     <p>Si vous pensez qu'il s'agit d'une erreur ou si vous souhaitez obtenir des informations complémentaires sur cette
-        décision, vous pouvez nous contacter via notre adresse email : <a href="mailto:sihiotsinfo@gmail.com">Cliquer ici</a>.</p>
+        décision, vous pouvez nous contacter via notre adresse email : <a href="mailto:sihiotsinfo@gmail.com">Cliquer
+            ici</a>.</p>
 
     <p>Nous restons à votre disposition pour toute question.</p>
 
-    <p>Cordialement,
+    <p>Cordialement,<br>
         Administrateur SIHIOTS</p>
 
     <hr>

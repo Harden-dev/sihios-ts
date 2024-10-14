@@ -37,7 +37,7 @@
 
     <p>Nous restons à votre disposition pour toute demande d'information complémentaire.</p>
 
-    <p>Cordialement,
+    <p>Cordialement,<br>
         Administrateur SIHIOTS</p>
 
     <hr>

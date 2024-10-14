@@ -44,7 +44,7 @@
     <p>Bienvenue parmi nous !</p>
 
     <p>
-        Cordialement,
+        Cordialement,<br>
         Administrateur SIHIOTS</p>
     <hr>
     <footer style="margin-top: 20px; text-align: center; color: #999;">

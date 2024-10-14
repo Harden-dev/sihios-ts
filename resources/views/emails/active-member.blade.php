@@ -38,7 +38,7 @@
 
     <p>Nous sommes ravis de vous revoir parmi nous !</p>
 
-    <p>Cordialement,
+    <p>Cordialement,<br>
         Administrateur SIHIOTS</p>
 
     <hr>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ApproveMail;
+use App\Mail\MemberActivated;
+use App\Mail\MemberDesactivated;
 use App\Mail\NewAdminCredentials;
 use App\Mail\RejectedMail;
 use App\Models\User;
@@ -249,9 +251,14 @@ class AdminController extends Controller
      * )
      */
 
-    public function getPendingMember()
+    public function getPendingMember(Request $request)
     {
-        $pendingMember = User::withTrashed()->where('status', 'pending')->where('role', 'user')->get();
+        $perPage = $request->input('per_page', 10);
+        $pendingMember = User::withTrashed()
+            ->where('status', 'pending')
+            ->where('role', 'user')
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
         return response()->json(['membre en attente' => $pendingMember]);
     }
 
@@ -272,9 +279,14 @@ class AdminController extends Controller
      * )
      */
 
-    public function getRejectMember()
+    public function getRejectMember(Request $request)
     {
-        $rejectMember = User::query()->where('status', 'rejected')->where('role', 'user')->get();
+        $perPage = $request->input('per_page', 10);
+        $rejectMember = User::query()
+            ->where('status', 'rejected')
+            ->where('role', 'user')
+            ->OrderByDesc('created_at')
+            ->paginate($perPage);
         return response()->json(['membres réjétés' => $rejectMember]);
     }
 
@@ -439,9 +451,11 @@ class AdminController extends Controller
 
         if ($user->trashed()) {
             $user->restore();
+            Mail::to($user->email)->send(new MemberActivated($user));
             return response()->json(['message' => "Activation réussie"]);
         } else {
             $user->delete();
+            Mail::to($user->email)->send(new MemberDesactivated($user));
             return response()->json(['message' => "Désactivation réussie"]);
         }
     }
