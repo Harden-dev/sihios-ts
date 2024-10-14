@@ -68,7 +68,7 @@ class CategorieController extends Controller
         $perPage = $request->input('per_page', 10);
         $categorie = Categorie::query()->OrderByDesc('created_at')->paginate($perPage);
         
-        return response()->json(['categorie' => $categorie]);
+        return response()->json( $categorie);
     }
 
     /**

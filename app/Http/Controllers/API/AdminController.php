@@ -177,7 +177,7 @@ class AdminController extends Controller
             ->where('role', 'user')
             ->orderByDesc('created_at')
             ->paginate($perPage);
-        return response()->json(['users' => $users]);
+        return response()->json($users);
     }
 
 
@@ -206,7 +206,7 @@ class AdminController extends Controller
             ->orderByDesc('created_at')
             ->paginate($perPage);
 
-        return response()->json(['admins' => $users]);
+        return response()->json($users);
     }
 
 
@@ -235,7 +235,7 @@ class AdminController extends Controller
             ->where('role', 'user')
             ->orderByDesc('created_at')
             ->paginate($perPage);
-        return response()->json(['users' => $users]);
+        return response()->json($users);
     }
 
     /**
@@ -263,7 +263,7 @@ class AdminController extends Controller
             ->where('role', 'user')
             ->orderByDesc('created_at')
             ->paginate($perPage);
-        return response()->json(['membre en attente' => $pendingMember]);
+        return response()->json( $pendingMember);
     }
 
     /**
@@ -291,7 +291,7 @@ class AdminController extends Controller
             ->where('role', 'user')
             ->OrderByDesc('created_at')
             ->paginate($perPage);
-        return response()->json(['membres réjétés' => $rejectMember]);
+        return response()->json($rejectMember);
     }
 
     /**
