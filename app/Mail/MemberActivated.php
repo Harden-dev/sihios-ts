@@ -29,7 +29,7 @@ class MemberActivated extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: ': Votre compte sur l\'espace membre de SIHIOTS a été réactivé',
+            subject: 'Votre compte sur l\'espace membre de SIHIOTS a été réactivé',
         );
     }
 
@@ -39,7 +39,7 @@ class MemberActivated extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.active-member',
         );
     }
 

@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MemberDesactivated extends Mailable
+class RegisterExamination extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,7 +17,7 @@ class MemberDesactivated extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct($user)
+    public function __construct( $user)
     {
         //
         $this->user = $user;
@@ -29,7 +29,7 @@ class MemberDesactivated extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Votre compte sur l\'espace membre de SIHIOTS a été désactivé',
+            subject: ' Confirmation de réception de votre adhésion',
         );
     }
 
@@ -39,7 +39,7 @@ class MemberDesactivated extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.desactivate-member',
+            view: 'emails.infos-mail',
         );
     }
 

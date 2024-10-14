@@ -75,5 +75,11 @@
             {{ $contact->message }}
         </div>
     </div>
+
+    <hr>
+
+    <footer style="margin-top: 20px; text-align: center; color: #999;">
+        <p>&copy; {{ date('Y') }} {{ config('app.name') }}. Tous droits réservés.</p>
+    </footer>
 </body>
 </html>
