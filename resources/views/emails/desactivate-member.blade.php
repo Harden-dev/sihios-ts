@@ -30,12 +30,13 @@
 <body>
     <h2>Bonjour, {{ $user->first_name }}</h2>
 
-    <p> Nous vous remercions pour l'intérêt que vous portez à SIHIOTS. Cependant, après examen de votre demande, nous
-        sommes au regret de vous informer que votre adhésion à l'espace membre n'a pas été approuvée.</p>
-    <p>Si vous avez des questions ou souhaitez des précisions concernant ce refus, vous pouvez nous contacter à<a
-            href="mailto:sihiotsinfo@gmail.com"></a>.</p>
+    <p> Nous souhaitons vous informer que votre compte sur l'espace membre de SIHIOTS a été désactivé. Cela signifie que
+        vous ne pourrez plus accéder à votre espace membre ni bénéficier des services et fonctionnalités réservés aux
+        membres.</p>
+    <p>Si vous pensez qu'il s'agit d'une erreur ou si vous souhaitez obtenir des informations complémentaires sur cette
+        décision, vous pouvez nous contacter via notre adresse email : <a href="mailto:sihiotsinfo@gmail.com">Cliquer ici</a>.</p>
 
-    <p>Nous restons à votre disposition pour toute demande d'information complémentaire.</p>
+    <p>Nous restons à votre disposition pour toute question.</p>
 
     <p>Cordialement,
         Administrateur SIHIOTS</p>

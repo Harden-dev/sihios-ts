@@ -24,19 +24,36 @@
             font-size: 16px;
             line-height: 1.6;
         }
-        
     </style>
 </head>
 
 <body>
-    <h2>Bienvenue, {{ $user->first_name }}</h2>
+    @php
+        $links = url('/login');
+    @endphp
+    <h2>Bonjour, {{ $user->first_name }}</h2>
 
-    <p> Votre compte administrateur sur {{ config('app.name') }} a été créé avec les informations suivantes :</p>
-    <p>Email : {{ $user->email }}</p>
+    <p> Félicitations, vous avez été désigné en tant qu'administrateur sur la plateforme SIHIOTS. Vous trouverez
+        ci-dessous vos informations de connexion pour accéder à votre espace administrateur :</p>
+    <p>Identifiant : {{ $user->email }}</p>
     <p>Mot de passe temporaire : {{ $password }}</p>
 
-    <p><strong>Important:</strong> Pour des raisons de sécurité, veuillez vous connecter et modifier votre mot de passe
-        avant les 30 minutes suivantes. </p>
+    <p><strong>Important:</strong>Nous vous recommandons de changer votre mot de passe lors de votre première connexion
+        pour garantir la sécurité
+        de votre compte. Pour accéder à votre compte, veuillez cliquer sur le lien suivant: <a
+            href="{{ $link }}">Cliquez ici</a></p>
+
+    <p>Si vous rencontrez des difficultés ou avez besoin d'aide, n'hésitez pas à nous contacter à<a
+        href="mailto:sihiotsinfo@gmail.com">Cliquer ici.</a>.
+    </p>
+
+    <p>Bienvenue dans l'équipe de SIHIOTS !</p>
+    <P>Cordialement</P>
+
+    <hr>
+    <footer style="margin-top: 20px; text-align: center; color: #999;">
+        <p>&copy; {{ date('Y') }} {{ config('app.name') }}. Tous droits réservés.</p>
+    </footer>
 </body>
 
 </html>

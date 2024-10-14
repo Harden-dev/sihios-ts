@@ -63,8 +63,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Nouveau message de contact</h1>
-        <p>Vous avez reçu un nouveau message de contact :</p>
+        <h1>Nouveau message</h1>
+        <p>Vous avez reçu un nouveau message :</p>
         <ul>
             <li><strong>Nom :</strong> {{ $contact->nom_prenom }}</li>
             <li><strong>Email :</strong> {{ $contact->email }}</li>

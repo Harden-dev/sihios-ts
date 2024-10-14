@@ -29,7 +29,7 @@ class ApproveMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Approbation de souscription',
+            subject: 'Votre adhésion à l\'espace membre de SIHIOTS a été acceptée',
         );
     }
 

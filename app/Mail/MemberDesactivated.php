@@ -9,14 +9,15 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RejectedMail extends Mailable
+class MemberDesactivated extends Mailable
 {
     use Queueable, SerializesModels;
-public $user;
+
+    public $user;
     /**
      * Create a new message instance.
      */
-    public function __construct( $user)
+    public function __construct($user)
     {
         //
         $this->user = $user;
@@ -28,7 +29,7 @@ public $user;
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Votre demande d\'adhésion à l\'espace membre de SIHIOTS',
+            subject: 'Votre compte sur l\'espace membre de SIHIOTS a été désactivé',
         );
     }
 
@@ -38,7 +39,7 @@ public $user;
     public function content(): Content
     {
         return new Content(
-            view: 'emails.reject-mail',
+            view: 'view.name',
         );
     }
 

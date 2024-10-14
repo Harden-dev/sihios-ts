@@ -30,12 +30,13 @@
 <body>
     <h2>Bonjour, {{ $user->first_name }}</h2>
 
-    <p> Nous vous remercions pour l'intérêt que vous portez à SIHIOTS. Cependant, après examen de votre demande, nous
-        sommes au regret de vous informer que votre adhésion à l'espace membre n'a pas été approuvée.</p>
-    <p>Si vous avez des questions ou souhaitez des précisions concernant ce refus, vous pouvez nous contacter à<a
-            href="mailto:sihiotsinfo@gmail.com"></a>.</p>
+    <p> Nous avons le plaisir de vous informer que votre compte sur l'espace membre de SIHIOTS a été réactivé. Vous
+        pouvez à nouveau accéder à votre espace membre et profiter des services et avantages qui vous sont réservés..
+    </p>
+    <p>Si vous avez besoin d'aide ou d'informations supplémentaires, n'hésitez pas à nous contacter via notre adresse email <a
+            href="mailto:sihiotsinfo@gmail.com">Cliquer ici</a>.</p>
 
-    <p>Nous restons à votre disposition pour toute demande d'information complémentaire.</p>
+    <p>Nous sommes ravis de vous revoir parmi nous !</p>
 
     <p>Cordialement,
         Administrateur SIHIOTS</p>

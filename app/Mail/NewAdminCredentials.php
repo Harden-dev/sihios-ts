@@ -31,7 +31,7 @@ class NewAdminCredentials extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Vos identifiants administrateur',
+            subject: ' Votre accès en tant qu\'administrateur sur la plateforme SIHIOTS',
         );
     }
 
