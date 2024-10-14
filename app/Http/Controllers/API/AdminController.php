@@ -170,9 +170,13 @@ class AdminController extends Controller
      *     )
      * )
      */
-    public function getAllMember()
+    public function getAllMember(Request $request)
     {
-        $users = User::withTrashed()->where('role', 'user')->get();
+        $perPage = $request->input('per_page', 10);
+        $users = User::withTrashed()
+            ->where('role', 'user')
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
         return response()->json(['users' => $users]);
     }
 
