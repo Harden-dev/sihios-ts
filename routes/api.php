@@ -64,6 +64,9 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
     Route::post('/admin/pending-member/{id}', [AdminController::class, 'pendingMemberAfterApprove']);
     Route::get('/admin/active', [AdminController::class, 'getActiveMember']);
     Route::get('/admin/all-member', [AdminController::class, 'getAllMember']);
+    Route::get('/admin/active-member-by-id/{id}', [AdminController::class, 'getActiveMemberById']);
+    Route::get('/admin/rejected-member/{id}',  [AdminController::class, 'getRejectMemberById']);
+    Route::get('/admin/{id}',  [AdminController::class, 'getAdminById']);
 
     Route::post('/admin/change-status/{id}/member', [AdminController::class, 'changeMemberStatus']);
     Route::post('/librairie', [LibrairieController::class, 'store']);

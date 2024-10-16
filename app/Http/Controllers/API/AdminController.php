@@ -209,6 +209,40 @@ class AdminController extends Controller
         return response()->json($users);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/admin/{id}",
+     *     tags={"Admin"},
+     *     summary="Obtenir un administrateur par son ID",
+     * security={{"Bearer": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de l'administrateur à récupérer",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Administrateur récupéré avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="admin", type="object", ref="#/components/schemas/User")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Administrateur non trouvé",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     )
+     * )
+     */
+    public function getAdminById($id)
+    {
+        $admin = User::withTrashed()->where('role', 'admin')->findOrFail($id);
+        return response()->json( $admin);
+    }
+
 
     /**
      * @OA\Get(
@@ -240,6 +274,47 @@ class AdminController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/admin/active-member-by-id/{id}",
+     *     tags={"Admin"},
+     *     summary="Obtenir un membre actif par son ID",
+     * security={{"Bearer": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID du membre actif à récupérer",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Membre actif récupéré avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="user", type="object", ref="#/components/schemas/User")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Membre actif non trouvé",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     )
+     * )
+     */
+    public function getActiveMemberById(Request $request, $id)
+    {
+        $user = User::withTrashed()
+            ->where('status', 'approved')
+            ->where('role', 'user')->findOrFail($id);
+
+        if (!$user) {
+            return response()->json(["error" => "not found"], 404);
+        }
+
+        return response()->json($user);
+    }
+
+    /**
+     * @OA\Get(
      *     path="/admin/pending-member",
      *     tags={"Admin"},
      *     summary="Obtenir tous les membres en attente",
@@ -263,7 +338,7 @@ class AdminController extends Controller
             ->where('role', 'user')
             ->orderByDesc('created_at')
             ->paginate($perPage);
-        return response()->json( $pendingMember);
+        return response()->json($pendingMember);
     }
 
     /**
@@ -291,6 +366,45 @@ class AdminController extends Controller
             ->where('role', 'user')
             ->OrderByDesc('created_at')
             ->paginate($perPage);
+        return response()->json($rejectMember);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/admin/rejected-member/{id}",
+     *     tags={"Admin"},
+     *     summary="Obtenir un membre rejeté par ID",
+     * security={{"Bearer": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID du membre rejeté à récupérer",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Membre rejeté récupéré avec succès",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Membre rejeté non trouvé",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     )
+     * )
+     */
+    public function getRejectMemberById($id)
+    {
+        $rejectMember = User::query()
+            ->where('status', 'rejected')
+            ->where('role', 'user')
+            ->findOrFail($id);
+
+        if (!$rejectMember) {
+            return response()->json(['error' => 'Membre rejeté non trouvé'], 404);
+        }
+
         return response()->json($rejectMember);
     }
 
