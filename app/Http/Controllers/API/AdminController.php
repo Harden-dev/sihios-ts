@@ -187,6 +187,7 @@ class AdminController extends Controller
         if (!$user) {
             return response()->json(["error" => " User not found"], 404);
         }
+        return response()->json($user);
     }
 
     /**
