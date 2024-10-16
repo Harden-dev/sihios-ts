@@ -181,6 +181,14 @@ class AdminController extends Controller
     }
 
 
+    public function getUserById($id)
+    {
+        $user = User::withTrashed()->find($id);
+        if (!$user) {
+            return response()->json(["error" => " User not found"], 404);
+        }
+    }
+
     /**
      * @OA\Get(
      *     path="/admin/admin-list",
@@ -240,7 +248,7 @@ class AdminController extends Controller
     public function getAdminById($id)
     {
         $admin = User::withTrashed()->where('role', 'admin')->findOrFail($id);
-        return response()->json( $admin);
+        return response()->json($admin);
     }
 
 
