@@ -53,6 +53,8 @@ Route::middleware('auth:api',)->group(function () {
 
     Route::get('/parcours/list', [ParcourController::class, 'index']);
     Route::get('/parcours/detail/{id}', [ParcourController::class, 'showParcoursDetail']);
+    Route::get('/admin/categorie', [CategorieController::class, 'index']);
+    Route::get('/auteur', [AuteurController::class, 'index']);
 });
 
 //admin routes
@@ -74,7 +76,7 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
     Route::put('/librairie/{id}', [LibrairieController::class, 'update']);
     Route::delete('/librairie/delete/{id}', [LibrairieController::class, 'destroy']);
 
-    Route::get('/auteur', [AuteurController::class, 'index']);
+  
     Route::get('/auteur/{id}', [AuteurController::class, 'getAuteurById']);
     Route::post('/auteur', [AuteurController::class, 'store']);
     Route::put('/auteur/update/{id}', [AuteurController::class, 'update']);
@@ -89,7 +91,7 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
     Route::delete('/parcours/delete/{id}', [ParcourController::class, 'destroy']);
 
 
-    Route::get('/admin/categorie', [CategorieController::class, 'index']);
+   
     Route::get('/admin/categorie/{id}', [CategorieController::class, 'getCategorieById']);
     Route::post('/admin/categorie', [CategorieController::class, 'store']);
     Route::put('/admin/categorie/update/{id}', [CategorieController::class, 'update']);
