@@ -471,7 +471,7 @@ class LibrairieController extends Controller
  *     description="Récupère une liste de livres, optionnellement filtrée par catégorie",
  *     tags={"Librairies"},
  *     @OA\Parameter(
- *         name="category_id",
+ *         name="categorie_id",
  *         in="query",
  *         description="ID de la catégorie pour filtrer les livres",
  *         required=false,
@@ -486,7 +486,7 @@ class LibrairieController extends Controller
  *                 type="object",
  *                 @OA\Property(property="id", type="integer"),
  *                 @OA\Property(property="title", type="string"),
- *                 @OA\Property(property="category_id", type="integer"),
+ *                 @OA\Property(property="categorie_id", type="integer"),
  *                 @OA\Property(property="created_at", type="string", format="date-time"),
  *                 @OA\Property(property="updated_at", type="string", format="date-time")
  *             )
