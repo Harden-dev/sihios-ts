@@ -47,6 +47,7 @@ Route::middleware('auth:api',)->group(function () {
     Route::get('/librairie/detail/{id}', [LibrairieController::class, 'showInfo']);
     Route::get('/librairie/{id}/download', [LibrairieController::class, 'download']);
     Route::get('/librairie/detail/{id}', [LibrairieController::class, 'showInfo']);
+    Route::get('/librairie/filter-by-category', [LibrairieController::class, 'filterByCategory']);
 
     Route::get('/event', [EventController::class, 'index']);
     Route::get('/event/detail/{id}', [EventController::class, 'showEventDetailById']);

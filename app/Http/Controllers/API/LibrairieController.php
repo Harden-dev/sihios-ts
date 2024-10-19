@@ -464,10 +464,50 @@ class LibrairieController extends Controller
     // }
 
 
+    /**
+ * @OA\Get(
+ *     path="/librairie/filter-by-category",
+ *     summary="Filtrer les livres par catégorie",
+ *     description="Récupère une liste de livres, optionnellement filtrée par catégorie",
+ *     tags={"Librairies"},
+ *     @OA\Parameter(
+ *         name="category_id",
+ *         in="query",
+ *         description="ID de la catégorie pour filtrer les livres",
+ *         required=false,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Liste des livres",
+ *         @OA\JsonContent(
+ *             type="array",
+ *             @OA\Items(
+ *                 type="object",
+ *                 @OA\Property(property="id", type="integer"),
+ *                 @OA\Property(property="title", type="string"),
+ *                 @OA\Property(property="category_id", type="integer"),
+ *                 @OA\Property(property="created_at", type="string", format="date-time"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Aucun livre trouvé"
+ *     )
+ * )
+ */
+     public function filterByCategory(Request $request)
+     {
+        $categorieId = $request->query('categorie_id');
+        
+        $librairies = Librairie::when($categorieId, function ($query) use ($categorieId) {
+            return $query->where('categorie_id', $categorieId);
+        })->get();
 
-
-
-
+        return response()->json($librairies);
+     }
 
 
     /**

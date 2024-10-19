@@ -22,7 +22,7 @@
                     "Admin"
                 ],
                 "summary": "Créer un nouvel administrateur",
-                "operationId": "c06e44c49f82eb22ad4d98ae27b3399a",
+                "operationId": "a4935736605727750b654f58983fe073",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -154,6 +154,63 @@
                 ]
             }
         },
+        "/admin/{id}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Obtenir un administrateur par son ID",
+                "operationId": "70e38d7e47136576446a2f225b364ffe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'administrateur à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Administrateur récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "admin": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Administrateur non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
         "/admin/active": {
             "get": {
                 "tags": [
@@ -171,6 +228,63 @@
                                     "items": {
                                         "$ref": "#/components/schemas/User"
                                     }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/admin/active-member-by-id/{id}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Obtenir un membre actif par son ID",
+                "operationId": "4b482e5a367feb25c6e27aa1a46c88ab",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du membre actif à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Membre actif récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Membre actif non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -229,6 +343,58 @@
                                     "items": {
                                         "$ref": "#/components/schemas/User"
                                     }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/admin/rejected-member/{id}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Obtenir un membre rejeté par ID",
+                "operationId": "dfe21bc4474d94cbe0bd1db763f275ac",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du membre rejeté à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Membre rejeté récupéré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Membre rejeté non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -582,6 +748,70 @@
                         "Bearer": []
                     }
                 ]
+            }
+        },
+        "/auteur/{id}": {
+            "get": {
+                "tags": [
+                    "Auteurs"
+                ],
+                "summary": "Récupérer un auteur par ID",
+                "description": "Retourne les informations d'un auteur spécifique en fonction de son ID.",
+                "operationId": "getAuteurById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'auteur à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de l'auteur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "auteur": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "auteur 1"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-10-07T14:48:00.000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-10-07T14:48:00.000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "auteur non trouvé"
+                    },
+                    "500": {
+                        "description": "Erreur interne"
+                    }
+                }
             }
         },
         "/auteur/update/{id}": {
@@ -968,13 +1198,126 @@
                 ]
             }
         },
-        "/api/admin/categorie": {
+        "/reset/password/mail": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Réinitialiser le mot de passe de l'utilisateur",
+                "description": "Cette fonction permet de réinitialiser le mot de passe d'un utilisateur et d'envoyer un nouveau mot de passe par email.",
+                "operationId": "b98da800899e077083940a17b8ca8455",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Adresse e-mail de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "email"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Mot de passe réinitialisé et envoyé par email",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Un nouveau mot de passe a été envoyé à votre adresse e-mail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Utilisateur non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "L'utilisateur n'existe pas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la réinitialisation du mot de passe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Le champ email est obligatoire."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/categorie": {
             "get": {
                 "tags": [
                     "Categories"
                 ],
                 "summary": "Récupérer toutes les catégories",
-                "operationId": "30bec28bdf8b5522fb486b4ecb1ffac7",
+                "operationId": "679df2821a971c73573365c1e32c2d33",
                 "responses": {
                     "200": {
                         "description": "Liste des catégories récupérée avec succès",
@@ -999,7 +1342,7 @@
                     "Categories"
                 ],
                 "summary": "Créer une nouvelle catégorie",
-                "operationId": "8592b1bc57acba0c6e45f9681c5f1253",
+                "operationId": "802f10ac326b689d1239a48bfe6b1317",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2157,6 +2500,64 @@
                 ]
             }
         },
+        "/librairie/filter-by-category": {
+            "get": {
+                "tags": [
+                    "Livres"
+                ],
+                "summary": "Filtrer les livres par catégorie",
+                "description": "Récupère une liste de livres, optionnellement filtrée par catégorie",
+                "operationId": "f86abec15bce3fd0eb62e435e11c4a52",
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "query",
+                        "description": "ID de la catégorie pour filtrer les livres",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des livres",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "category_id": {
+                                                "type": "integer"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aucun livre trouvé"
+                    }
+                }
+            }
+        },
         "/librairie/delete/{id}": {
             "delete": {
                 "tags": [
@@ -3183,6 +3584,10 @@
         {
             "name": "Librairies",
             "description": "Librairies"
+        },
+        {
+            "name": "Livres",
+            "description": "Livres"
         },
         {
             "name": "Newsletter",
