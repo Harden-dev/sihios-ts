@@ -202,7 +202,7 @@ class LibrairieController extends Controller
 
             return response()->json([
                 'librairie' => $librairie,
-                //'auteurs' => $auteurs,
+              
 
             ], 201);
         } catch (Exception $th) {
