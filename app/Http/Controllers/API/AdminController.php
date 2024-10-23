@@ -141,6 +141,7 @@ class AdminController extends Controller
                     'status' => $user->status,
                 ],
             ], 201);
+            
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         } catch (Exception $th) {
