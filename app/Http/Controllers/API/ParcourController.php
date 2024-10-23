@@ -202,7 +202,7 @@ class ParcourController extends Controller
                 'condition_acces' => 'sometimes|array',
                 'condition_acces.*' => 'string',
                 'description' => 'nullable|string|max:255',
-                'file' => ['required', 'file', new AllowedFileType, 'max:20480'],
+                'file' => ['required', 'file', new AllowedFileType, 'max:5242880'],
             ]);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
@@ -211,7 +211,7 @@ class ParcourController extends Controller
         try {
             $file = $request->file('file');
 
-            $allowedMimeTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
+            $allowedMimeTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png', 'image/webpd', 'image/gif'];
             if (!in_array($file->getClientMimeType(), $allowedMimeTypes)) {
                 return response()->json(['error' => 'Le fichier doit être un PDF, un document Word ou une image'], 422);
             }

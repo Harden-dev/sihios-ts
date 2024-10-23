@@ -169,7 +169,7 @@ class LibrairieController extends Controller
             'auteurs' => 'required|array',
             'auteurs.*:auteurs,id',
             'file' => ['required', 'file', new AllowedFileType],
-            'file_img' => ['required', 'image',  'max:20480'], // Validation pour l'image
+            'file_img' => ['required', 'image',  'max:5242880'], // Validation pour l'image
         ]);
 
         try {

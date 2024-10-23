@@ -130,7 +130,7 @@ class EventController extends Controller
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'label' => 'required',
-                'file' => ['required', 'file', new AllowedFileType, 'max:20480'],
+                'file' => ['required', 'file', new AllowedFileType, 'max:5242880'],
             ]);
             Log::info('Validation réussie');
         } catch (ValidationException $e) {
@@ -142,7 +142,7 @@ class EventController extends Controller
             $file = $request->file('file');
 
 
-            $allowedMimeTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
+            $allowedMimeTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/gif'];
             if (!in_array($file->getClientMimeType(), $allowedMimeTypes)) {
 
 

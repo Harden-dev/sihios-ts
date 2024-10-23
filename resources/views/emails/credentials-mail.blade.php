@@ -28,9 +28,6 @@
 </head>
 
 <body>
-    @php
-        $links = url('/login');
-    @endphp
     <h2>Bonjour, {{ $user->first_name }}</h2>
 
     <p> Félicitations, vous avez été désigné en tant qu'administrateur sur la plateforme SIHIOTS. Vous trouverez
@@ -40,8 +37,7 @@
 
     <p><strong>Important:</strong>Nous vous recommandons de changer votre mot de passe lors de votre première connexion
         pour garantir la sécurité
-        de votre compte. Pour accéder à votre compte, veuillez cliquer sur le lien suivant: <a
-            href="{{ $link }}">Cliquez ici</a></p>
+        de votre compte. </p>
 
     <p>Si vous rencontrez des difficultés ou avez besoin d'aide, n'hésitez pas à nous contacter à<a
         href="mailto:sihiotsinfo@gmail.com">Cliquer ici.</a>.
