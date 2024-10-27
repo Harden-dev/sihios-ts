@@ -29,7 +29,7 @@ class RegisterExamination extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: ' Confirmation de réception de votre adhésion',
+            subject: ' Confirmation de véception de votre demande d\'adhésion à la SIHIOTS',
         );
     }
 

@@ -82,6 +82,62 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
+
+     /**
+ * @OA\Post(
+ *     path="/register",
+ *     summary="Créer un nouvel utilisateur",
+ *     description="Enregistre un nouvel utilisateur et envoie un e-mail de confirmation.",
+ *     tags={"Auth"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"first_name", "last_name", "email", "phone", "job_title", "password", "password_confirmation"},
+ *             @OA\Property(property="first_name", type="string", example="Jean"),
+ *             @OA\Property(property="last_name", type="string", example="Dupont"),
+ *             @OA\Property(property="email", type="string", format="email", example="jean.dupont@example.com"),
+ *             @OA\Property(property="phone", type="string", example="123456789"),
+ *             @OA\Property(property="job_title", type="string", example="Manager"),
+ *             @OA\Property(property="password", type="string", format="password", example="password123"),
+ *             @OA\Property(property="password_confirmation", type="string", format="password", example="password123")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Utilisateur créé avec succès.",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="User created successfully"),
+ *             @OA\Property(property="user", type="object",
+ *                 @OA\Property(property="id", type="integer", example=1),
+ *                 @OA\Property(property="first_name", type="string", example="Jean"),
+ *                 @OA\Property(property="last_name", type="string", example="Dupont"),
+ *                 @OA\Property(property="email", type="string", format="email", example="jean.dupont@example.com"),
+ *                 @OA\Property(property="phone", type="string", example="123456789"),
+ *                 @OA\Property(property="job_title", type="string", example="Manager"),
+ *                 @OA\Property(property="status", type="string", example="pending")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Erreur de validation.",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="errors", type="object",
+ *                 @OA\Property(property="email", type="array",
+ *                     @OA\Items(type="string", example="Cette adresse e-mail est déjà utilisée.")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Erreur interne du serveur.",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Une erreur s'est produite.")
+ *         )
+ *     )
+ * )
+ */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -188,6 +244,12 @@ class AuthController extends Controller
         if ($user->status == 'pending') {
             Auth::guard('api')->logout();
             return response()->json(['error' => 'Votre compte  est en cours en d\'approbation, contacter l\'administrateur'], 403);
+        }
+
+        
+        if ($user->status == 'rejected') {
+            Auth::guard('api')->logout();
+            return response()->json(['error' => 'Impossible de vous connecter , votre compte a été rejté !'], 403);
         }
 
         if ($user->deleted_at) {

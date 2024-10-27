@@ -30,14 +30,17 @@
 <body>
     <h2>Bonjour, {{ $user->first_name }}</h2>
 
-    <p> Nous vous confirmons que nous avons bien reçu votre demande d'adhésion. Celle-ci est actuellement en cours de
-        validation par notre équipe.</p>
-    <p>Nous vous informerons dès que le processus d'examen sera finalisé.</p>
+    <p> Nous vous remercions de l'intérêt que vous portez à la SIHIOTS et d'avoir rempli notre formulaire d'adhésion sur
+        le site..</p>
+    <p>Nous souhaitons vous informer que votre demande a bien été reçue et sera traitée dans les meilleurs délais. Une
+        fois l'examen terminé, nous vous tiendrons informé(e) des prochaines étapes à suivre pour finaliser votre
+        intégration au sein de notre organisation..</p>
 
-    <p>Nous vous remercions pour votre confiance et restons à votre disposition pour toute question complémentaire.</p>
+    <p>En attendant, n’hésitez pas à nous contacter pour toute question ou précision. Nous serons ravis de vous
+        assister..</p>
 
     <p>Cordialement,<br>
-       SIHIOTS - <a href="mailto:sihiotsinfo@gmail.com">Contacter via mail</a>.</p>
+        SIHIOTS - <a href="mailto:sihiotsinfo@gmail.com">Contacter via mail</a>.</p>
 
     <hr>
 
