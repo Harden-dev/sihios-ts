@@ -141,7 +141,6 @@ class AdminController extends Controller
                     'status' => $user->status,
                 ],
             ], 201);
-            
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         } catch (Exception $th) {
@@ -491,10 +490,20 @@ class AdminController extends Controller
             return response()->json(['error' => 'Membre non trouvé'], 404);
         }
 
+        // Générer 4 caractères aléatoires
+        $random = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 4);
+
+        // Séparer l'email en parties avant et après @
+        $emailParts = explode('@', $user->email);
+
+        // Ajouter les caractères aléatoires avant le @
+        $user->email = $emailParts[0] . $random . '@' . $emailParts[1];
         $user->status = 'rejected';
+
         $user->save();
 
         Mail::to($user->email)->send(new RejectedMail($user));
+
         return response()->json(['message' => 'Membre rejeté avec succès']);
     }
 
