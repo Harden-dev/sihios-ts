@@ -36,8 +36,9 @@
         sécuriser votre compte. Pour ce faire, connectez-vous à votre espace membre puis
         rendez-vous dans les paramètres de votre compte pour modifier votre mot de passe
     </p>
-    <p>Si vous n'êtes pas à l'origine de cette demande, veuillez contacter notre service d'assistance immédiatement à
-        <a href="mailto:sihiotsinfo@gmail.com">Cliquer ici</a>
+    <p>Si vous n'êtes pas à l'origine de cette demande, veuillez contacter notre service d'assistance immédiatement via notre
+        adresse email : <a href="mailto:sihiotsinfo@gmail.com">Cliquer
+            ici</a>.</p>
     </p>
 
     <p>Merci de votre confiance.<br>

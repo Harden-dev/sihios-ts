@@ -38,9 +38,9 @@
     <p>Pour vous connecter, veuillez utiliser les identifiants que vous avez créés lors de votre inscription sur notre
         plateforme.</p>
 
-    <p>Si vous avez besoin d'assistance ou de renseignements supplémentaires, n'hésitez pas à nous contacter à <a
-            href="mailto:sihiotsinfo@gmail.com">Cliquer ici.</a></p>
-
+    <p>Si vous avez besoin d'assistance ou de renseignements supplémentaires, n'hésitez pas à nous contacter via notre
+        adresse email : <a href="mailto:sihiotsinfo@gmail.com">Cliquer
+            ici</a>.</p>
     <p>Bienvenue parmi nous !</p>
 
     <p>

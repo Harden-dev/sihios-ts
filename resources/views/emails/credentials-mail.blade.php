@@ -39,8 +39,9 @@
         pour garantir la sécurité
         de votre compte. </p>
 
-    <p>Si vous rencontrez des difficultés ou avez besoin d'aide, n'hésitez pas à nous contacter à<a
-        href="mailto:sihiotsinfo@gmail.com">Cliquer ici.</a>.
+    <p>Si vous rencontrez des difficultés ou avez besoin d'aide,  n'hésitez pas à nous contacter via notre
+        adresse email : <a href="mailto:sihiotsinfo@gmail.com">Cliquer
+            ici</a>.</p>
     </p>
 
     <p>Bienvenue dans l'équipe de SIHIOTS !</p>

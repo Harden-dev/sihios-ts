@@ -36,11 +36,13 @@
         fois l'examen terminé, nous vous tiendrons informé(e) des prochaines étapes à suivre pour finaliser votre
         intégration au sein de notre organisation..</p>
 
-    <p>En attendant, n’hésitez pas à nous contacter pour toute question ou précision. Nous serons ravis de vous
+    <p>En attendant, n’hésitez pas à nous contacter pour toute question ou précision via notre
+        adresse email : <a href="mailto:sihiotsinfo@gmail.com">Cliquer
+            ici</a>. Nous serons ravis de vous
         assister..</p>
 
     <p>Cordialement,<br>
-        SIHIOTS - <a href="mailto:sihiotsinfo@gmail.com">Contacter via mail</a>.</p>
+        SIHIOTS </p>
 
     <hr>
 
