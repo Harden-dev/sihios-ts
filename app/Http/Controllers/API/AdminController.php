@@ -485,25 +485,22 @@ class AdminController extends Controller
     public function rejectMember($id)
     {
         $user = User::findOrFail($id);
-
-        if (!$user) {
-            return response()->json(['error' => 'Membre non trouvé'], 404);
-        }
-
+        
+        // Envoyer l'email avant la modification
+        Mail::to($user->email)->send(new RejectedMail($user));
+    
         // Générer 4 caractères aléatoires
         $random = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 4);
-
+    
         // Séparer l'email en parties avant et après @
         $emailParts = explode('@', $user->email);
-
+    
         // Ajouter les caractères aléatoires avant le @
         $user->email = $emailParts[0] . $random . '@' . $emailParts[1];
         $user->status = 'rejected';
-
+    
         $user->save();
-
-        Mail::to($user->email)->send(new RejectedMail($user));
-
+    
         return response()->json(['message' => 'Membre rejeté avec succès']);
     }
 
