@@ -28,7 +28,7 @@ public $user;
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Votre demande d\'adhésion à l\'espace membre de SIHIOTS',
+            subject: 'Votre adhésion à l\'espace membre de SIHIOTS a été rejetée',
         );
     }
 

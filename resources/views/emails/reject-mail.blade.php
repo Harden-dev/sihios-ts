@@ -33,7 +33,7 @@
     <p> Nous vous remercions pour l'intérêt que vous portez à SIHIOTS. Cependant, après examen de votre demande, nous
         sommes au regret de vous informer que votre adhésion à l'espace membre n'a pas été approuvée.</p>
     <p>Si vous avez des questions ou souhaitez des précisions concernant ce refus, vous pouvez nous contacter à<a
-            href="mailto:sihiotsinfo@gmail.com"></a>.</p>
+            href="mailto:sihiotsinfo@gmail.com">cliquer ici</a>.</p>
 
     <p>Nous restons à votre disposition pour toute demande d'information complémentaire.</p>
 
