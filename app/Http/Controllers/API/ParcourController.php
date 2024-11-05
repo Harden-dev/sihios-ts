@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewParcoursNotification;
 use App\Models\Parcour;
+use App\Models\User;
 use App\Rules\AllowedFileType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Mail;
 
 class ParcourController extends Controller
 {
@@ -230,6 +233,14 @@ class ParcourController extends Controller
 
             $parcours->file_url = asset('storage/parcours/' . $path);
             
+             // Récupérer tous les utilisateurs avec le rôle 'user'
+             $users = User::where('role', 'user')->get();
+
+             // Envoyer l'email à tous ces utilisateurs
+             foreach ($users as $user) {
+                 Mail::to($user->email)->queue(new NewParcoursNotification($parcours, $user->last_name));
+             }
+
             return response()->json($parcours, 201);
         } catch (Exception $th) {
             return response()->json(['error' => $th->getMessage()], 500);

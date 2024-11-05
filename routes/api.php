@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AdminController;
+use App\Http\Controllers\API\AnnonceController;
 use App\Http\Controllers\API\AuteurController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategorieController;
@@ -35,6 +36,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forgot-password', [ForgortPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/reset-password', [ForgortPasswordController::class, 'resetPassword']);
 Route::post('/reset/password/mail', [AuthController::class, 'ResetPasswordMail']);
+
+Route::get('/public/event', [AnnonceController::class, 'index']);
 
 
 Route::middleware('auth:api',)->group(function () {
@@ -97,6 +100,10 @@ Route::middleware(['auth:api', 'check.role:admin,super-admin'])->group(function 
     Route::post('/admin/categorie', [CategorieController::class, 'store']);
     Route::put('/admin/categorie/update/{id}', [CategorieController::class, 'update']);
     Route::delete('/admin/categorie/delete/{id}', [CategorieController::class, 'destroy']);
+
+    Route::post('/add/new/public/event', [AnnonceController::class, 'store']);
+    Route::put('/update/public/event/{id}', [AnnonceController::class, 'update']);
+    Route::delete('/delete/public/event/{id}', [AnnonceController::class, 'destroy']);
 });
 
 Route::middleware(['auth:api', 'check.role:super-admin'])->group(function () {

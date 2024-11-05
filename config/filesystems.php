@@ -79,6 +79,14 @@ return [
             'url' => env('APP_URL') . '/storage/parcours',
             'visibility' => 'private',
             'throw' => false,
+        ],
+
+        'annonce' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/AnnonceFile'),
+            'url' => env('APP_URL') . '/storage/AnnonceFile',
+            'visibility' => 'private',
+            'throw' => false,
         ]
 
     ],

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewEventNotification;
 use App\Models\Event;
+use App\Models\User;
 use App\Rules\AllowedFileType;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Log;
+use Mail;
 use OpenApi\Annotations as OA;
 
 /**
@@ -159,6 +162,13 @@ class EventController extends Controller
             ]);
 
             $events->file_url = asset('storage/eventFile/' . $path);
+            // Récupérer tous les utilisateurs avec le rôle 'user'
+            $users = User::where('role', 'user')->get();
+
+            // Envoyer l'email à tous ces utilisateurs
+            foreach ($users as $user) {
+                Mail::to($user->email)->queue(new NewEventNotification($events, $user->last_name));
+            }
 
 
 

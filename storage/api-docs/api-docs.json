@@ -648,6 +648,382 @@
                 }
             }
         },
+        "/public/event": {
+            "get": {
+                "tags": [
+                    "Evenement Public"
+                ],
+                "summary": "Obtenir la liste des Evenements Public",
+                "operationId": "9cff916df30fc2e12d2fcb906b181c3f",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre d'éléments par page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Une liste de parcours récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Annonces"
+                                            }
+                                        },
+                                        "links": {
+                                            "type": "object"
+                                        },
+                                        "meta": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/add/new/public/event": {
+            "post": {
+                "tags": [
+                    "Evenement Public"
+                ],
+                "summary": "Créer un nouvel Evenement Public",
+                "operationId": "d81eaf4db26b362310b80180d71049fb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "Le titre de l'Evenement Public",
+                                        "type": "string",
+                                        "example": "Titre de l'Evenement Public"
+                                    },
+                                    "description": {
+                                        "description": "Une description du Evenement Public",
+                                        "type": "string",
+                                        "example": "Description du Evenement Public"
+                                    },
+                                    "file": {
+                                        "description": "Le fichier à télécharger (format binaire)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "label": {
+                                        "description": "Tableau de chaînes de caractères pour les labels de l'Evenement Public",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Evenement Public créé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "label": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "file_path": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/update/public/event/{id}": {
+            "put": {
+                "tags": [
+                    "Evenement Public"
+                ],
+                "summary": "Mettre à jour un Evenement public existant",
+                "operationId": "b6acab556a4751e5c9b2e26c0e2b3191",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'Evenement public à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Titre mis à jour du Evenement public"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Description mise à jour du Evenement public"
+                                    },
+                                    "file": {
+                                        "description": "Nouveau fichier à télécharger (optionnel)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "label": {
+                                        "description": "Tableau de labels mis à jour",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Evenement public mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Mise à jour réussie"
+                                        },
+                                        "Evenement public": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "label": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "file_path": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Evenement public non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Evenement public not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/delete/public/event/{id}": {
+            "delete": {
+                "tags": [
+                    "Evenement Public"
+                ],
+                "summary": "Supprimer un Evenement par ID",
+                "operationId": "9a73140450bdac5d71ac000e0ee5137e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du Evenement à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Evenement supprimé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Evenement non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
         "/auteur": {
             "get": {
                 "tags": [
@@ -943,6 +1319,160 @@
                         "Bearer": []
                     }
                 ]
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Créer un nouvel utilisateur",
+                "description": "Enregistre un nouvel utilisateur et envoie un e-mail de confirmation.",
+                "operationId": "e66f8a7452e13b03ae4e77dbb42e435c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "phone",
+                                    "job_title",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Jean"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Dupont"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jean.dupont@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "job_title": {
+                                        "type": "string",
+                                        "example": "Manager"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur créé avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "first_name": {
+                                                    "type": "string",
+                                                    "example": "Jean"
+                                                },
+                                                "last_name": {
+                                                    "type": "string",
+                                                    "example": "Dupont"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "jean.dupont@example.com"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "123456789"
+                                                },
+                                                "job_title": {
+                                                    "type": "string",
+                                                    "example": "Manager"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "pending"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Cette adresse e-mail est déjà utilisée."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur s'est produite."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/login": {
@@ -2503,14 +3033,14 @@
         "/librairie/filter-by-category": {
             "get": {
                 "tags": [
-                    "Livres"
+                    "Librairies"
                 ],
                 "summary": "Filtrer les livres par catégorie",
                 "description": "Récupère une liste de livres, optionnellement filtrée par catégorie",
                 "operationId": "f86abec15bce3fd0eb62e435e11c4a52",
                 "parameters": [
                     {
-                        "name": "category_id",
+                        "name": "categorie_id",
                         "in": "query",
                         "description": "ID de la catégorie pour filtrer les livres",
                         "required": false,
@@ -2534,7 +3064,7 @@
                                             "title": {
                                                 "type": "string"
                                             },
-                                            "category_id": {
+                                            "categorie_id": {
                                                 "type": "integer"
                                             },
                                             "created_at": {
@@ -3347,6 +3877,47 @@
                 },
                 "type": "object"
             },
+            "Annonces": {
+                "title": "Annonces",
+                "required": [
+                    "id",
+                    "title",
+                    "desciption",
+                    "label",
+                    "file"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "L'identifiant unique du Evenement Public",
+                        "type": "integer"
+                    },
+                    "label": {
+                        "description": "Titre du Evenement Public",
+                        "type": "string"
+                    },
+                    "field": {
+                        "description": "Domaine d'étude du Evenement Public",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Description du Evenement Public",
+                        "type": "string"
+                    },
+                    "file_path": {
+                        "description": "Chemin du fichier téléchargé",
+                        "type": "string"
+                    },
+                    "mime_type": {
+                        "description": "Type MIME du fichier téléchargé",
+                        "type": "string"
+                    },
+                    "size": {
+                        "description": "Taille du fichier téléchargé en octets",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "Auteur": {
                 "title": "Auteur",
                 "required": [
@@ -3562,6 +4133,10 @@
             "description": "Admin"
         },
         {
+            "name": "Evenement Public",
+            "description": "Evenement Public"
+        },
+        {
             "name": "Auteurs",
             "description": "Auteurs"
         },
@@ -3584,10 +4159,6 @@
         {
             "name": "Librairies",
             "description": "Librairies"
-        },
-        {
-            "name": "Livres",
-            "description": "Livres"
         },
         {
             "name": "Newsletter",

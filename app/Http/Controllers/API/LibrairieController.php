@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewLibrairieNotification;
 use App\Models\Librairie;
+use App\Models\User;
 use App\Rules\AllowedFileType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Log;
+use Mail;
 use Storage;
 
 
@@ -200,6 +203,14 @@ class LibrairieController extends Controller
             $librairie->file_url = asset('storage/librairie/' . $path);
             $librairie->image_url = asset('storage/librairie/' . $pathImg);
 
+              // Récupérer tous les utilisateurs avec le rôle 'user'
+              $users = User::where('role', 'user')->get();
+
+              // Envoyer l'email à tous ces utilisateurs
+              foreach ($users as $user) {
+                  Mail::to($user->email)->queue(new NewLibrairieNotification($librairie, $user->last_name));
+              }
+  
             return response()->json([
                 'librairie' => $librairie,
               
