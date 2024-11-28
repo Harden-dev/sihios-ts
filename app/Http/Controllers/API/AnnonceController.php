@@ -40,6 +40,11 @@ class AnnonceController extends Controller
      *         type="string",
      *         description="Description du Evenement Public"
      *     ),
+     * @OA\Property(
+     *         property="category",
+     *         type="string",
+     *         description="Category de l'evenement"
+     *     ),
      *     @OA\Property(
      *         property="file_path",
      *         type="string",
@@ -184,6 +189,7 @@ class AnnonceController extends Controller
             [
                 'title'=>'required',
                 'description'=>'required',
+                'category'=>'required',
                 'label' => 'sometimes|array',
                 'label.*' => 'string',
                 'file'=>['required', 'file', new AllowedFileType, 'max:5242880']
@@ -207,6 +213,7 @@ class AnnonceController extends Controller
                     'title' => $request->title,
                     'description' => $request->description,
                     'label' => $request->label,
+                    'category'=>$request->category,
                     'file_path' => $path,
                 ]);
     
@@ -340,7 +347,7 @@ class AnnonceController extends Controller
 
             $annonce->title = $validated['title'];
             $annonce->description = $validated['description'] ?? $annonce->description;
-
+            $annonce->category = $validated['category'] ?? $annonce->category;
             if (isset($validated['label'])) {
                 $annonce->label = $validated['label'];
             }

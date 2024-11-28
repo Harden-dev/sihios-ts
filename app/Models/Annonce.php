@@ -15,7 +15,8 @@ class Annonce extends Model
         'title',
         'file_path',
         'description',
-        'label'
+        'label',
+        'category'
     ];
 
     protected $casts = [
