@@ -3903,6 +3903,10 @@
                         "description": "Description du Evenement Public",
                         "type": "string"
                     },
+                    "category": {
+                        "description": "Category de l'evenement",
+                        "type": "string"
+                    },
                     "file_path": {
                         "description": "Chemin du fichier téléchargé",
                         "type": "string"

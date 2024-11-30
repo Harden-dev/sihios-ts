@@ -22,4 +22,5 @@ class Annonce extends Model
     protected $casts = [
         'label' => 'array'
     ];
+
 }
