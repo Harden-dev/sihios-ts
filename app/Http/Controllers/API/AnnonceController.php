@@ -68,7 +68,7 @@ class AnnonceController extends Controller
     /**
      * @OA\Get(
      *     path="/public/event",
-     *     tags={"Evenement Public"},
+     *     tags={"Annonces"},
      *     summary="Obtenir la liste des Evenements Public",
      *     @OA\Parameter(
      *         name="per_page",
@@ -100,88 +100,83 @@ class AnnonceController extends Controller
         return response()->json($annonces);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/add/new/public/event",
-     *     tags={"Evenement Public"},
-     *     summary="Créer un nouvel Evenement Public",
-     *     security={{"Bearer": {}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 type="object",
-     *                 @OA\Property(
-     *                     property="title",
-     *                     type="string",
-     *                     example="Titre de l'Evenement Public",
-     *                     description="Le titre de l'Evenement Public"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="description",
-     *                     type="string",
-     *                     example="Description du Evenement Public",
-     *                     description="Une description du Evenement Public"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="file",
-     *                     type="string",
-     *                     format="binary",
-     *                     description="Le fichier à télécharger (format binaire)"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="label",
-     *                     type="array",
-     *                     @OA\Items(type="string"),
-     *                     description="Tableau de chaînes de caractères pour les labels de l'Evenement Public"
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Evenement Public créé avec succès",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="id", type="integer"),
-     *             @OA\Property(property="title", type="string"),
-     *             @OA\Property(property="description", type="string"),
-     *             @OA\Property(
-     *                 property="label",
-     *                 type="array",
-     *                 @OA\Items(type="string")
-     *             ),
-     *             @OA\Property(property="created_at", type="string", format="date-time"),
-     *             @OA\Property(property="updated_at", type="string", format="date-time"),
-     *             @OA\Property(property="file_path", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Erreur de validation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 additionalProperties=true
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Erreur serveur",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="error",
-     *                 type="string"
-     *             )
-     *         )
-     *     )
-     * )
-     */
+   /**
+ * @OA\Post(
+ *     path="/api/annonces",
+ *     tags={"Annonces"},
+ *     summary="Créer une nouvelle annonce",
+ *     security={{"Bearer": {}}},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 required={"title", "description", "category", "label"},
+ *                 @OA\Property(property="title", type="string", example="Titre de l'annonce"),
+ *                 @OA\Property(property="description", type="string", example="Description de l'annonce"),
+ *                 @OA\Property(property="category", type="string", example="Catégorie de l'annonce"),
+ *                 @OA\Property(
+ *                     property="label",
+ *                     type="array",
+ *                     @OA\Items(
+ *                         @OA\Property(property="title", type="string", example="Titre du label"),
+ *                         @OA\Property(property="content", type="string", example="Contenu du label")
+ *                     ),
+ *                     description="Tableau de labels"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="file",
+ *                     type="string",
+ *                     format="binary",
+ *                     description="Fichier image à télécharger (optionnel)"
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Annonce créée avec succès",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="id", type="integer", example=1),
+ *             @OA\Property(property="title", type="string", example="Titre de l'annonce"),
+ *             @OA\Property(property="description", type="string", example="Description de l'annonce"),
+ *             @OA\Property(property="category", type="string", example="Catégorie de l'annonce"),
+ *             @OA\Property(
+ *                 property="label",
+ *                 type="string",
+ *                 example="[{'title':'Label 1', 'content':'Contenu 1'}, {'title':'Label 2', 'content':'Contenu 2'}]"
+ *             ),
+ *             @OA\Property(property="file_path", type="string", example="path/to/file.jpg"),
+ *             @OA\Property(property="file_url", type="string", example="http://example.com/storage/AnnonceFile/file.jpg"),
+ *             @OA\Property(property="created_at", type="string", format="date-time"),
+ *             @OA\Property(property="updated_at", type="string", format="date-time")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Erreur de validation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 additionalProperties=true
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Erreur serveur",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="error", type="string", example="Une erreur s'est produite veuillez contacter l'administrateur"),
+ *             @OA\Property(property="details", type="string", example="Message d'erreur détaillé")
+ *         )
+ *     )
+ * )
+ */
+
 
     public function store(Request $request)
     {
@@ -443,7 +438,7 @@ class AnnonceController extends Controller
     /**
      * @OA\Delete(
      *     path="/delete/public/event/{id}",
-     *     tags={"Evenement Public"},
+     *     tags={"Annonces"},
      *     summary="Supprimer un Evenement par ID",
      * security={{"Bearer": {}}},
      *     @OA\Parameter(
