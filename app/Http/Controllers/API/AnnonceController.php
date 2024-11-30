@@ -183,8 +183,8 @@ class AnnonceController extends Controller
      * )
      */
 
-     public function store(Request $request)
-     {
+    public function store(Request $request)
+    {
         dd($request->all());
         $validated = $request->validate([
             'title' => 'required',
@@ -197,7 +197,7 @@ class AnnonceController extends Controller
         ]);
 
         try {
-          
+
             $file = $request->file('file');
 
             $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/gif'];
@@ -233,9 +233,53 @@ class AnnonceController extends Controller
                 "details" => $th->getMessage()
             ], 500); // Code de statut 500 pour une erreur serveur
         }
-     }
+    }
 
 
+    /**
+     * @OA\Get(
+     *     path="/annonces/{id}",
+     *     tags={"Annonces"},
+     *     summary="Afficher les détails d'une annonce",
+     *     description="Récupère les détails d'une annonce spécifique à partir de son ID.",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Identifiant unique de l'annonce",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails de l'annonce récupérés avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="titre", type="string", example="Appartement à louer"),
+     *             @OA\Property(property="description", type="string", example="Bel appartement au centre-ville"),
+     *             @OA\Property(property="prix", type="number", format="float", example=750.50),
+     *             @OA\Property(property="created_at", type="string", format="date-time", example="2024-11-18T12:34:56Z"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-18T12:34:56Z")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Annonce non trouvée",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Annonce non trouvée")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur serveur",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Erreur interne du serveur")
+     *         )
+     *     )
+     * )
+     */
     public function showAnnonceDetailById($id)
     {
         $annonce = Annonce::findOrFail($id);
@@ -247,13 +291,14 @@ class AnnonceController extends Controller
     /**
      * @OA\Put(
      *     path="/update/public/event/{id}",
-     *     tags={"Evenement Public"},
-     *     summary="Mettre à jour un Evenement public existant",
+     *     tags={"Annonces"},
+     *     summary="Mettre à jour une annonce existante",
+     *     description="Met à jour une annonce avec les données fournies, y compris un fichier optionnel et une liste de labels.",
      *     security={{"Bearer": {}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="ID de l'Evenement public à mettre à jour",
+     *         description="ID de l'annonce à mettre à jour",
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
@@ -262,59 +307,62 @@ class AnnonceController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 @OA\Property(property="title", type="string", example="Titre mis à jour du Evenement public"),
-     *                 @OA\Property(property="description", type="string", example="Description mise à jour du Evenement public"),
-     *                 @OA\Property(property="file", type="string", format="binary", description="Nouveau fichier à télécharger (optionnel)"),
+     *                 required={"title", "description", "category", "label"},
+     *                 @OA\Property(property="title", type="string", example="Titre de l'annonce"),
+     *                 @OA\Property(property="description", type="string", example="Description détaillée de l'annonce"),
+     *                 @OA\Property(property="category", type="string", example="Immobilier"),
      *                 @OA\Property(
      *                     property="label",
      *                     type="array",
-     *                     @OA\Items(type="string"),
-     *                     description="Tableau de labels mis à jour"
-     *                 )
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="title", type="string", example="Label 1"),
+     *                         @OA\Property(property="content", type="string", example="Contenu du label 1")
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="file", type="string", format="binary", description="Fichier optionnel à télécharger")
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Evenement public mis à jour avec succès",
+     *         description="Annonce mise à jour avec succès",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="message", type="string", example="Mise à jour réussie"),
+     *             @OA\Property(property="id", type="integer"),
+     *             @OA\Property(property="title", type="string"),
+     *             @OA\Property(property="description", type="string"),
+     *             @OA\Property(property="category", type="string"),
      *             @OA\Property(
-     *                 property="Evenement public",
+     *                 property="label",
+     *                 type="array",
+     *                 @OA\Items(type="object")
+     *             ),
+     *             @OA\Property(property="file_path", type="string", example="path/to/file.jpg"),
+     *             @OA\Property(property="file_url", type="string", example="http://example.com/path/to/file.jpg"),
+     *             @OA\Property(property="created_at", type="string", format="date-time"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erreur de validation des données",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Le fichier doit être une image"),
+     *             @OA\Property(
+     *                 property="details",
      *                 type="object",
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="title", type="string"),
-     *                 @OA\Property(property="description", type="string"),
-     *                 @OA\Property(
-     *                     property="label",
-     *                     type="array",
-     *                     @OA\Items(type="string")
-     *                 ),
-     *                 @OA\Property(property="created_at", type="string", format="date-time"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time"),
-     *                 @OA\Property(property="file_path", type="string")
+     *                 additionalProperties=true
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Evenement public non trouvé",
+     *         description="Annonce non trouvée",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="error", type="string", example="Evenement public not found")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Erreur de validation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 additionalProperties=true
-     *             )
+     *             @OA\Property(property="error", type="string", example="Annonce non trouvée")
      *         )
      *     ),
      *     @OA\Response(
@@ -322,19 +370,17 @@ class AnnonceController extends Controller
      *         description="Erreur serveur",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(
-     *                 property="error",
-     *                 type="string"
-     *             )
+     *             @OA\Property(property="error", type="string", example="Une erreur s'est produite veuillez contacter l'administrateur"),
+     *             @OA\Property(property="details", type="string", example="Message d'erreur interne")
      *         )
      *     )
      * )
      */
 
 
-     public function update(Request $request, $id)
-     {
-    //  dd($request->all());  
+    public function update(Request $request, $id)
+    {
+        //  dd($request->all());  
         $validated = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -348,7 +394,7 @@ class AnnonceController extends Controller
         try {
             // Récupérer l'annonce existante
             $annonce = Annonce::findOrFail($id);
-          
+
             // Gestion du fichier
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
@@ -377,7 +423,7 @@ class AnnonceController extends Controller
             $annonce->description = $request->description;
             $annonce->category = $request->category;
             $annonce->label = $labelData;
-           
+
             // Sauvegarder les modifications
             $annonce->save();
 
@@ -392,7 +438,7 @@ class AnnonceController extends Controller
                 "details" => $th->getMessage()
             ], 500); // Code de statut 500 pour une erreur serveur
         }
-     }
+    }
 
     /**
      * @OA\Delete(
@@ -420,28 +466,27 @@ class AnnonceController extends Controller
      * )
      */
 
-     public function destroy($id)
-     {
+    public function destroy($id)
+    {
         try {
             $annonce = Annonce::findOrFail($id);
-            
+
             // Suppression du fichier physique
             if ($annonce->file_path) {
                 Storage::disk('annonce')->delete($annonce->file_path);
             }
-     
+
             // Suppression de l'annonce en base
             $annonce->delete();
-     
+
             return response()->json([
                 'message' => 'Annonce supprimée avec succès',
             ], 200);
-     
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'Une erreur est survenue lors de la suppression.',
                 'details' => $e->getMessage()
             ], 500);
         }
-     }
+    }
 }
