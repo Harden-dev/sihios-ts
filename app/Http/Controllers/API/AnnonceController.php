@@ -97,6 +97,10 @@ class AnnonceController extends Controller
             ->orderByDesc('created_at')
             ->paginate($per_page);
 
+            foreach ($annonces as $item) {
+                $item->file_url = asset('storage/AnnonceFile/' . $item->file_path);
+            }
+
         return response()->json($annonces);
     }
 
