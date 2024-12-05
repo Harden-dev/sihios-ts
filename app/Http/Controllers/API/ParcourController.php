@@ -218,7 +218,7 @@ class ParcourController extends Controller
             if (!in_array($file->getClientMimeType(), $allowedMimeTypes)) {
                 return response()->json(['error' => 'Le fichier doit être un PDF, un document Word ou une image'], 422);
             }
-
+            
             $path = $file->store('', 'parcours');
             File::chmod(storage_path("app/public/parcours/". $path), 0644);
             $parcours = Parcour::create([

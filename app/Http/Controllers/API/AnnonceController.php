@@ -182,57 +182,55 @@ class AnnonceController extends Controller
  */
 
 
-    public function store(Request $request)
-    {
-        //dd($request->all());
-        $validated = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'category' => 'required',
-            'label' => 'required|array',
-            'label.*.title' => 'required|string',
-            'label.*.content' => 'required|string',
-            'file' => ['nullable', 'file', new AllowedFileType, 'max:5242880']
-        ]);
-
-        try {
-
-            $file = $request->file('file');
-
-            $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/gif'];
-            if (!in_array($file->getClientMimeType(), $allowedMimeTypes)) {
-                return response()->json(['error' => 'Le fichier doit être une image'], 422);
-            }
-
-            $path = $file->store('', 'annonce');
-            File::chmod(storage_path("app/public/AnnonceFile/" . $path), 0644);
-
-            // Construction du label
-            $labelData = json_encode($request->input('label'));
-
-            // Debug pour voir ce qu'on va sauvegarder
-            \Log::info('Label Data:', ['data' => $labelData]);
-
-            // Utilisation de create pour simplifier le code
-            $annonce = Annonce::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'category' => $request->category,
-                'label' => $labelData,
-                'file_path' => $path,
-            ]);
-
-            $annonce->file_url = asset('storage/AnnonceFile/' . $path);
-
-            return response()->json($annonce, 201); // Code de statut 201 pour une création réussie
-        } catch (Exception $th) {
-            \Log::error('Store Error:', ['error' => $th->getMessage()]);
-            return response()->json([
-                "error" => "Une erreur s'est produite veuillez contacter l'administrateur",
-                "details" => $th->getMessage()
-            ], 500); // Code de statut 500 pour une erreur serveur
-        }
-    }
+ public function store(Request $request)
+ {
+     $validated = $request->validate([
+         'title' => 'required',
+         'description' => 'required',
+         'category' => 'required',
+         'label' => 'required|array',
+         'label.*.title' => 'required|string',
+         'label.*.content' => 'required|string',
+         'file' => ['nullable', 'file', new AllowedFileType, 'max:5242880']
+     ]);
+ 
+     try {
+         $file = $request->file('file');
+ 
+         // Vérification du type MIME
+         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/gif'];
+         if ($file && !in_array($file->getClientMimeType(), $allowedMimeTypes)) {
+             return response()->json(['error' => 'Le fichier doit être une image'], 422);
+         }
+ 
+         // Stockage du fichier
+         $path = $file ? $file->store('', 'annonce') : null;
+ 
+         if ($path) {
+             File::chmod(storage_path("app/public/AnnonceFile/" . $path), 0644);
+         }
+ 
+         // Enregistrement de l'annonce
+         $annonce = Annonce::create([
+             'title' => $request->title,
+             'description' => $request->description,
+             'category' => $request->category,
+             'label' => $request->input('label'), // Sauvegarde directe du tableau JSON
+             'file_path' => $path,
+         ]);
+ 
+         $annonce->file_url = $path ? asset('storage/AnnonceFile/' . $path) : null;
+ 
+         return response()->json($annonce, 201);
+     } catch (Exception $th) {
+         \Log::error('Store Error:', ['error' => $th->getMessage()]);
+         return response()->json([
+             "error" => "Une erreur s'est produite, veuillez contacter l'administrateur",
+             "details" => $th->getMessage()
+         ], 500);
+     }
+ }
+ 
 
 
     /**
