@@ -281,6 +281,11 @@ class AnnonceController extends Controller
     {
         $annonce = Annonce::findOrFail($id);
 
+        if(!$annonce)
+        {
+            return response()->json(["error"=>"Annonce non trouvée"]);
+        }
+
         return response()->json($annonce, 200);
     }
 

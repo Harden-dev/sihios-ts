@@ -191,6 +191,7 @@ class LibrairieController extends Controller
             $librairie = Librairie::create([
                 'title' => $request->title,
                 'categorie_id' => $request->categorie_id,
+                'description'=> $request->desctiption,
                 'download'=> $request->boolean('download'),
                 'file_img' => $pathImg,
                 'file_path' => $path,
@@ -371,7 +372,7 @@ class LibrairieController extends Controller
 
          try {
              // Mise à jour des champs simples
-             $librairie->fill($request->only(['title', 'categorie_id', 'download']));
+             $librairie->fill($request->only(['title', 'categorie_id', 'download', 'description']));
 
              // Gestion du fichier principal (optionnel)
              if ($request->hasFile('file')) {
