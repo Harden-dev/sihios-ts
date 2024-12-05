@@ -168,7 +168,7 @@ class LibrairieController extends Controller
         // Validation des fichiers
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'download'=>'nullable',
+            'download'=>'boolean',
             'categorie_id'  => 'required',
             'auteurs' => 'required|array',
             'auteurs.*:auteurs,id',
