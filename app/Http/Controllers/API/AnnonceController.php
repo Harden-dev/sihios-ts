@@ -418,7 +418,7 @@ class AnnonceController extends Controller
             }
 
             // Construction du label
-            $labelData = json_encode($request->input('label'));
+            $labelData = $request->input('label');
 
             // Mise à jour des champs de l'annonce
             $annonce->title = $request->title;

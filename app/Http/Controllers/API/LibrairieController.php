@@ -191,7 +191,7 @@ class LibrairieController extends Controller
             $librairie = Librairie::create([
                 'title' => $request->title,
                 'categorie_id' => $request->categorie_id,
-                'description'=> $request->desctiption,
+                'description'=> $request->description,
                 'download'=> $request->boolean('download'),
                 'file_img' => $pathImg,
                 'file_path' => $path,
