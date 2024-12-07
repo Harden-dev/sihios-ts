@@ -16,6 +16,7 @@ class Annonce extends Model
         'file_path',
         'description',
         'label',
+        'subtitle',
         'category'
     ];
 

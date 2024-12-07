@@ -187,6 +187,7 @@ class AnnonceController extends Controller
      $validated = $request->validate([
          'title' => 'required',
          'description' => 'required',
+         'subtitle' => 'nullable',
          'category' => 'required',
          'label' => 'required|array',
          'label.*.title' => 'required|string',
@@ -214,6 +215,7 @@ class AnnonceController extends Controller
          $annonce = Annonce::create([
              'title' => $request->title,
              'description' => $request->description,
+             'subtitle'=> $request->subtitle,
              'category' => $request->category,
              'label' => $request->input('label'), // Sauvegarde directe du tableau JSON
              'file_path' => $path,
@@ -424,6 +426,7 @@ class AnnonceController extends Controller
             $annonce->title = $request->title;
             $annonce->description = $request->description;
             $annonce->category = $request->category;
+            $annonce->subtitle = $request->subtitle;
             $annonce->label = $labelData;
 
             // Sauvegarder les modifications
