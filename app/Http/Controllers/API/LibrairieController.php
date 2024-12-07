@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Rules\AllowedFileType;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Log;
 use Mail;
@@ -166,17 +167,22 @@ class LibrairieController extends Controller
     public function store(Request $request)
     {
         // Validation des fichiers
-        $validated = $request->validate([
+           // Validation avec messages d'erreur détaillés
+           $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'download'=>'boolean',
-            'description'=>'required|string',
-            'categorie_id'  => 'required',
+            'download' => 'boolean',
+            'description' => 'required|string',
+            'categorie_id' => 'required',
             'auteurs' => 'required|array',
-            'auteurs.*:auteurs,id',
+            'auteurs.*' => 'exists:auteurs,id',
             'file' => ['required', 'file', new AllowedFileType],
-            'file_img' => ['required', 'image',  'max:5242880'], // Validation pour l'image
+            'file_img' => ['required', 'image', 'max:5242880']
         ]);
 
+        if ($validator->fails()) {
+            \Log::error('Validation errors:', $validator->errors()->toArray());
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
         try {
             // Traitement du fichier principal
             $file = $request->file('file');
