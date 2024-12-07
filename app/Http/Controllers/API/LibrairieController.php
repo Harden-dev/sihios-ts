@@ -169,6 +169,7 @@ class LibrairieController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'download'=>'boolean',
+            'description'=>'required|string',
             'categorie_id'  => 'required',
             'auteurs' => 'required|array',
             'auteurs.*:auteurs,id',
