@@ -39,6 +39,7 @@ Route::post('/reset/password/mail', [AuthController::class, 'ResetPasswordMail']
 
 Route::get('/public/event', [AnnonceController::class, 'index']);
 Route::get('/public/event/show/{id}', [AnnonceController::class, 'showAnnonceDetailById']);
+Route::get('/public/event/filter', [AnnonceController::class, 'filterEventByCategory']);
 
 Route::middleware('auth:api',)->group(function () {
     Route::get('/me',  [AuthController::class, 'me']);

@@ -154,7 +154,7 @@ class AnnonceController extends Controller
  *             @OA\Property(property="file_path", type="string", example="path/to/file.jpg"),
  *             @OA\Property(property="file_url", type="string", example="http://example.com/storage/AnnonceFile/file.jpg"),
  *             @OA\Property(property="created_at", type="string", format="date-time"),
- *             @OA\Property(property="updated_at", type="string", format="date-time")
+     *             @OA\Property(property="updated_at", type="string", format="date-time")
  *         )
  *     ),
  *     @OA\Response(
@@ -493,5 +493,52 @@ class AnnonceController extends Controller
                 'details' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/public/event/filter",
+     *     tags={"Annonces"},
+     *     summary="Filtrer les Evenements Public par catégorie",
+     *     @OA\Parameter(
+     *         name="category",
+     *         in="query",
+     *         description="Catégorie pour filtrer les événements",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des événements filtrés récupérée avec succès",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/Annonces")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Aucun événement trouvé pour cette catégorie",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Aucun événement trouvé")
+     *         )
+     *     )
+     * )
+     */
+    public function filterEventByCategory(Request $request)
+    {
+        $category = $request->input('category'); 
+
+        $annonces = Annonce::where('category', $category)->get(); 
+
+        if ($annonces->isEmpty()) {
+            return response()->json(['error' => 'Aucun événement trouvé'], 404); 
+        }
+
+        foreach ($annonces as $item) {
+            $item->file_url = asset('storage/AnnonceFile/' . $item->file_path);
+        }
+
+        return response()->json($annonces);
     }
 }
