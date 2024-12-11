@@ -651,7 +651,7 @@
         "/public/event": {
             "get": {
                 "tags": [
-                    "Evenement Public"
+                    "Annonces"
                 ],
                 "summary": "Obtenir la liste des Evenements Public",
                 "operationId": "9cff916df30fc2e12d2fcb906b181c3f",
@@ -695,40 +695,58 @@
                 }
             }
         },
-        "/add/new/public/event": {
+        "/api/annonces": {
             "post": {
                 "tags": [
-                    "Evenement Public"
+                    "Annonces"
                 ],
-                "summary": "Créer un nouvel Evenement Public",
-                "operationId": "d81eaf4db26b362310b80180d71049fb",
+                "summary": "Créer une nouvelle annonce",
+                "operationId": "763d3fd5015ca3b7cfcb93467aa2732f",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "category",
+                                    "label"
+                                ],
                                 "properties": {
                                     "title": {
-                                        "description": "Le titre de l'Evenement Public",
                                         "type": "string",
-                                        "example": "Titre de l'Evenement Public"
+                                        "example": "Titre de l'annonce"
                                     },
                                     "description": {
-                                        "description": "Une description du Evenement Public",
                                         "type": "string",
-                                        "example": "Description du Evenement Public"
+                                        "example": "Description de l'annonce"
                                     },
-                                    "file": {
-                                        "description": "Le fichier à télécharger (format binaire)",
+                                    "category": {
                                         "type": "string",
-                                        "format": "binary"
+                                        "example": "Catégorie de l'annonce"
                                     },
                                     "label": {
-                                        "description": "Tableau de chaînes de caractères pour les labels de l'Evenement Public",
+                                        "description": "Tableau de labels",
                                         "type": "array",
                                         "items": {
-                                            "type": "string"
+                                            "properties": {
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Titre du label"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Contenu du label"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
+                                    },
+                                    "file": {
+                                        "description": "Fichier image à télécharger (optionnel)",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -738,25 +756,38 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Evenement Public créé avec succès",
+                        "description": "Annonce créée avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "id": {
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": 1
                                         },
                                         "title": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Titre de l'annonce"
                                         },
                                         "description": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Description de l'annonce"
+                                        },
+                                        "category": {
+                                            "type": "string",
+                                            "example": "Catégorie de l'annonce"
                                         },
                                         "label": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
+                                            "type": "string",
+                                            "example": "[{'title':'Label 1', 'content':'Contenu 1'}, {'title':'Label 2', 'content':'Contenu 2'}]"
+                                        },
+                                        "file_path": {
+                                            "type": "string",
+                                            "example": "path/to/file.jpg"
+                                        },
+                                        "file_url": {
+                                            "type": "string",
+                                            "example": "http://example.com/storage/AnnonceFile/file.jpg"
                                         },
                                         "created_at": {
                                             "type": "string",
@@ -765,9 +796,6 @@
                                         "updated_at": {
                                             "type": "string",
                                             "format": "date-time"
-                                        },
-                                        "file_path": {
-                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -798,7 +826,12 @@
                                 "schema": {
                                     "properties": {
                                         "error": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Une erreur s'est produite veuillez contacter l'administrateur"
+                                        },
+                                        "details": {
+                                            "type": "string",
+                                            "example": "Message d'erreur détaillé"
                                         }
                                     },
                                     "type": "object"
@@ -814,97 +847,58 @@
                 ]
             }
         },
-        "/update/public/event/{id}": {
-            "put": {
+        "/annonces/{id}": {
+            "get": {
                 "tags": [
-                    "Evenement Public"
+                    "Annonces"
                 ],
-                "summary": "Mettre à jour un Evenement public existant",
-                "operationId": "b6acab556a4751e5c9b2e26c0e2b3191",
+                "summary": "Afficher les détails d'une annonce",
+                "description": "Récupère les détails d'une annonce spécifique à partir de son ID.",
+                "operationId": "de8fc81fa4b403d735e0f49a9f5e000a",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de l'Evenement public à mettre à jour",
+                        "description": "Identifiant unique de l'annonce",
                         "required": true,
                         "schema": {
                             "type": "integer"
                         }
                     }
                 ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "properties": {
-                                    "title": {
-                                        "type": "string",
-                                        "example": "Titre mis à jour du Evenement public"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Description mise à jour du Evenement public"
-                                    },
-                                    "file": {
-                                        "description": "Nouveau fichier à télécharger (optionnel)",
-                                        "type": "string",
-                                        "format": "binary"
-                                    },
-                                    "label": {
-                                        "description": "Tableau de labels mis à jour",
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        }
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
-                        "description": "Evenement public mis à jour avec succès",
+                        "description": "Détails de l'annonce récupérés avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Mise à jour réussie"
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
                                         },
-                                        "Evenement public": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer"
-                                                },
-                                                "title": {
-                                                    "type": "string"
-                                                },
-                                                "description": {
-                                                    "type": "string"
-                                                },
-                                                "label": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                },
-                                                "file_path": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
+                                        "titre": {
+                                            "type": "string",
+                                            "example": "Appartement à louer"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Bel appartement au centre-ville"
+                                        },
+                                        "prix": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 750.5
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-11-18T12:34:56Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-11-18T12:34:56Z"
                                         }
                                     },
                                     "type": "object"
@@ -913,30 +907,14 @@
                         }
                     },
                     "404": {
-                        "description": "Evenement public non trouvé",
+                        "description": "Annonce non trouvée",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "error": {
                                             "type": "string",
-                                            "example": "Evenement public not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erreur de validation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "errors": {
-                                            "type": "object",
-                                            "additionalProperties": true
+                                            "example": "Annonce non trouvée"
                                         }
                                     },
                                     "type": "object"
@@ -951,7 +929,184 @@
                                 "schema": {
                                     "properties": {
                                         "error": {
+                                            "type": "string",
+                                            "example": "Erreur interne du serveur"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/update/public/event/{id}": {
+            "put": {
+                "tags": [
+                    "Annonces"
+                ],
+                "summary": "Mettre à jour une annonce existante",
+                "description": "Met à jour une annonce avec les données fournies, y compris un fichier optionnel et une liste de labels.",
+                "operationId": "b6acab556a4751e5c9b2e26c0e2b3191",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'annonce à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "category",
+                                    "label"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Titre de l'annonce"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Description détaillée de l'annonce"
+                                    },
+                                    "category": {
+                                        "type": "string",
+                                        "example": "Immobilier"
+                                    },
+                                    "label": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Label 1"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Contenu du label 1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "file": {
+                                        "description": "Fichier optionnel à télécharger",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Annonce mise à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "title": {
                                             "type": "string"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "category": {
+                                            "type": "string"
+                                        },
+                                        "label": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "file_path": {
+                                            "type": "string",
+                                            "example": "path/to/file.jpg"
+                                        },
+                                        "file_url": {
+                                            "type": "string",
+                                            "example": "http://example.com/path/to/file.jpg"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation des données",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Le fichier doit être une image"
+                                        },
+                                        "details": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Annonce non trouvée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Annonce non trouvée"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Une erreur s'est produite veuillez contacter l'administrateur"
+                                        },
+                                        "details": {
+                                            "type": "string",
+                                            "example": "Message d'erreur interne"
                                         }
                                     },
                                     "type": "object"
@@ -970,7 +1125,7 @@
         "/delete/public/event/{id}": {
             "delete": {
                 "tags": [
-                    "Evenement Public"
+                    "Annonces"
                 ],
                 "summary": "Supprimer un Evenement par ID",
                 "operationId": "9a73140450bdac5d71ac000e0ee5137e",
@@ -1022,6 +1177,57 @@
                         "Bearer": []
                     }
                 ]
+            }
+        },
+        "/public/event/filter": {
+            "get": {
+                "tags": [
+                    "Annonces"
+                ],
+                "summary": "Filtrer les Evenements Public par catégorie",
+                "operationId": "9893c20d36c8b99a599b1781042d0427",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "Catégorie pour filtrer les événements",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des événements filtrés récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Annonces"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aucun événement trouvé pour cette catégorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Aucun événement trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/auteur": {
@@ -4137,8 +4343,8 @@
             "description": "Admin"
         },
         {
-            "name": "Evenement Public",
-            "description": "Evenement Public"
+            "name": "Annonces",
+            "description": "Annonces"
         },
         {
             "name": "Auteurs",
