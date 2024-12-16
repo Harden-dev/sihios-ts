@@ -68,7 +68,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/public/eventFile'),
             'url' => env('APP_URL') . '/storage/eventFile',
-            'visibility' => 'private',
+            'visibility' => 'public',
             'throw' => false,
         ],
 
@@ -77,7 +77,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/public/parcours'),
             'url' => env('APP_URL') . '/storage/parcours',
-            'visibility' => 'private',
+            'visibility' => 'public',
             'throw' => false,
         ],
 
@@ -85,7 +85,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/public/AnnonceFile'),
             'url' => env('APP_URL') . '/storage/AnnonceFile',
-            'visibility' => 'private',
+            'visibility' => 'public',
             'throw' => false,
         ]
 

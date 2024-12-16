@@ -97,142 +97,134 @@ class AnnonceController extends Controller
             ->orderByDesc('created_at')
             ->paginate($per_page);
 
-            foreach ($annonces as $item) {
-                $item->file_url = asset('storage/AnnonceFile/' . $item->file_path);
-            }
+        foreach ($annonces as $item) {
+            $item->file_url = $item->file_path
+                ? asset('storage/AnnonceFile/' . $item->file_path)
+                : null;
+        }
 
         return response()->json($annonces);
     }
 
-   /**
- * @OA\Post(
- *     path="/api/annonces",
- *     tags={"Annonces"},
- *     summary="Créer une nouvelle annonce",
- *     security={{"Bearer": {}}},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\MediaType(
- *             mediaType="multipart/form-data",
- *             @OA\Schema(
- *                 required={"title", "description", "category", "label"},
- *                 @OA\Property(property="title", type="string", example="Titre de l'annonce"),
- *                 @OA\Property(property="description", type="string", example="Description de l'annonce"),
- *                 @OA\Property(property="category", type="string", example="Catégorie de l'annonce"),
- *                 @OA\Property(
- *                     property="label",
- *                     type="array",
- *                     @OA\Items(
- *                         @OA\Property(property="title", type="string", example="Titre du label"),
- *                         @OA\Property(property="content", type="string", example="Contenu du label")
- *                     ),
- *                     description="Tableau de labels"
- *                 ),
- *                 @OA\Property(
- *                     property="file",
- *                     type="string",
- *                     format="binary",
- *                     description="Fichier image à télécharger (optionnel)"
- *                 )
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Annonce créée avec succès",
- *         @OA\JsonContent(
- *             type="object",
- *             @OA\Property(property="id", type="integer", example=1),
- *             @OA\Property(property="title", type="string", example="Titre de l'annonce"),
- *             @OA\Property(property="description", type="string", example="Description de l'annonce"),
- *             @OA\Property(property="category", type="string", example="Catégorie de l'annonce"),
- *             @OA\Property(
- *                 property="label",
- *                 type="string",
- *                 example="[{'title':'Label 1', 'content':'Contenu 1'}, {'title':'Label 2', 'content':'Contenu 2'}]"
- *             ),
- *             @OA\Property(property="file_path", type="string", example="path/to/file.jpg"),
- *             @OA\Property(property="file_url", type="string", example="http://example.com/storage/AnnonceFile/file.jpg"),
- *             @OA\Property(property="created_at", type="string", format="date-time"),
+    /**
+     * @OA\Post(
+     *     path="/api/annonces",
+     *     tags={"Annonces"},
+     *     summary="Créer une nouvelle annonce",
+     *     security={{"Bearer": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"title", "description", "category", "label"},
+     *                 @OA\Property(property="title", type="string", example="Titre de l'annonce"),
+     *                 @OA\Property(property="description", type="string", example="Description de l'annonce"),
+     *                 @OA\Property(property="category", type="string", example="Catégorie de l'annonce"),
+     *                 @OA\Property(
+     *                     property="label",
+     *                     type="array",
+     *                     @OA\Items(
+     *                         @OA\Property(property="title", type="string", example="Titre du label"),
+     *                         @OA\Property(property="content", type="string", example="Contenu du label")
+     *                     ),
+     *                     description="Tableau de labels"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="file",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="Fichier image à télécharger (optionnel)"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Annonce créée avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="title", type="string", example="Titre de l'annonce"),
+     *             @OA\Property(property="description", type="string", example="Description de l'annonce"),
+     *             @OA\Property(property="category", type="string", example="Catégorie de l'annonce"),
+     *             @OA\Property(
+     *                 property="label",
+     *                 type="string",
+     *                 example="[{'title':'Label 1', 'content':'Contenu 1'}, {'title':'Label 2', 'content':'Contenu 2'}]"
+     *             ),
+     *             @OA\Property(property="file_path", type="string", example="path/to/file.jpg"),
+     *             @OA\Property(property="file_url", type="string", example="http://example.com/storage/AnnonceFile/file.jpg"),
+     *             @OA\Property(property="created_at", type="string", format="date-time"),
      *             @OA\Property(property="updated_at", type="string", format="date-time")
- *         )
- *     ),
- *     @OA\Response(
- *         response=422,
- *         description="Erreur de validation",
- *         @OA\JsonContent(
- *             type="object",
- *             @OA\Property(
- *                 property="errors",
- *                 type="object",
- *                 additionalProperties=true
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Erreur serveur",
- *         @OA\JsonContent(
- *             type="object",
- *             @OA\Property(property="error", type="string", example="Une erreur s'est produite veuillez contacter l'administrateur"),
- *             @OA\Property(property="details", type="string", example="Message d'erreur détaillé")
- *         )
- *     )
- * )
- */
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erreur de validation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 additionalProperties=true
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur serveur",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Une erreur s'est produite veuillez contacter l'administrateur"),
+     *             @OA\Property(property="details", type="string", example="Message d'erreur détaillé")
+     *         )
+     *     )
+     * )
+     */
 
 
- public function store(Request $request)
- {
-     $validated = $request->validate([
-         'title' => 'required',
-         'description' => 'required',
-         'subtitle' => 'nullable',
-         'category' => 'required',
-         'label' => 'required|array',
-         'label.*.title' => 'required|string',
-         'label.*.content' => 'required|string',
-         'file' => ['nullable', 'file', new AllowedFileType, 'max:5242880']
-     ]);
- 
-     try {
-         $file = $request->file('file');
- 
-         // Vérification du type MIME
-         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/gif'];
-         if ($file && !in_array($file->getClientMimeType(), $allowedMimeTypes)) {
-             return response()->json(['error' => 'Le fichier doit être une image'], 422);
-         }
- 
-         // Stockage du fichier
-         $path = $file ? $file->store('', 'annonce') : null;
- 
-         if ($path) {
-             File::chmod(storage_path("app/public/AnnonceFile/" . $path), 0644);
-         }
- 
-         // Enregistrement de l'annonce
-         $annonce = Annonce::create([
-             'title' => $request->title,
-             'description' => $request->description,
-             'subtitle'=> $request->subtitle,
-             'category' => $request->category,
-             'label' => $request->input('label'), // Sauvegarde directe du tableau JSON
-             'file_path' => $path,
-         ]);
- 
-         $annonce->file_url = $path ? asset('storage/AnnonceFile/' . $path) : null;
- 
-         return response()->json($annonce, 201);
-     } catch (Exception $th) {
-         \Log::error('Store Error:', ['error' => $th->getMessage()]);
-         return response()->json([
-             "error" => "Une erreur s'est produite, veuillez contacter l'administrateur",
-             "details" => $th->getMessage()
-         ], 500);
-     }
- }
- 
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'subtitle' => 'nullable',
+            'category' => 'required',
+            'label' => 'required|array',
+            'label.*.title' => 'required|string',
+            'label.*.content' => 'required|string',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,webp,gif|max:5120', // 5MB
+        ]);
+
+        try {
+            $file = $request->file('file');
+            $path = $file ? $file->store('', 'annonce') : null;
+
+            // Enregistrement de l'annonce
+            $annonce = Annonce::create([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'subtitle' => $validated['subtitle'],
+                'category' => $validated['category'],
+                'label' => $validated['label'], // Sauvegarde du tableau JSON
+                'file_path' => $path,
+            ]);
+
+            $annonce->file_url = $path ? asset('storage/AnnonceFile/' . $path) : null;
+
+            return response()->json($annonce, 201);
+        } catch (Exception $th) {
+            \Log::error('Erreur lors de la création d\'une annonce', [
+                'message' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                "error" => "Une erreur s'est produite, veuillez réessayer plus tard.",
+            ], 500);
+        }
+    }
 
 
     /**
@@ -283,9 +275,8 @@ class AnnonceController extends Controller
     {
         $annonce = Annonce::findOrFail($id);
 
-        if(!$annonce)
-        {
-            return response()->json(["error"=>"Annonce non trouvée"]);
+        if (!$annonce) {
+            return response()->json(["error" => "Annonce non trouvée"]);
         }
 
         return response()->json($annonce, 200);
@@ -527,12 +518,12 @@ class AnnonceController extends Controller
      */
     public function filterEventByCategory(Request $request)
     {
-        $category = $request->input('category'); 
+        $category = $request->input('category');
 
-        $annonces = Annonce::where('category', $category)->get(); 
+        $annonces = Annonce::where('category', $category)->get();
 
         if ($annonces->isEmpty()) {
-            return response()->json(['error' => 'Aucun événement trouvé'], 404); 
+            return response()->json(['error' => 'Aucun événement trouvé'], 404);
         }
 
         foreach ($annonces as $item) {
